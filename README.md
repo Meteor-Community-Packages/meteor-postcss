@@ -95,3 +95,8 @@ Npm.require("autoprefixer")({add: false, browsers: []});
 ### Demo test repo
 
 - [https://github.com/juliancwirko/meteor-postcss-test](https://github.com/juliancwirko/meteor-postcss-test)
+- [Discussion and updates](https://forums.meteor.com/t/postcss-package-and-meteor-build-plugin-questions/12454?u=juliancwirko)
+
+### Todo
+
+- hook all into Meteor minifiers with .css extension
