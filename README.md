@@ -86,8 +86,8 @@ Npm.require("autoprefixer")({add: false, browsers: []});
 
 ### Sum up
 
-1. Can we do this simpler. Is there a way to customize our build plugins by adding new npm packages from outside the package?
+1. Can we do this simpler. Is there a way to customize our Meteor build plugins by adding new npm packages from outside the package?
 
-2. I think that the Build Plugins API should be better documented :/
+2. I think that the Build Plugins API in Meteor should be better documented :/
 
 3. I realy want to use `.css` extension :/

@@ -1,13 +1,13 @@
 Package.describe({
-    summary: 'Use PostCSS with Meteor',
-    version: '0.0.1',
+    summary: 'PostCSS with Meteor',
+    version: '0.0.2',
     name: 'juliancwirko:postcss',
-    git: ''
+    git: 'https://github.com/juliancwirko/meteor-postcss.git'
 });
 
 Package.registerBuildPlugin({
     name: 'compilePostCSS',
-    use: ['ecmascript', 'caching-compiler'],
+    use: ['ecmascript@0.1.6', 'caching-compiler@1.0.0'],
     sources: [
         'plugin/compile-postcss.js'
     ],
