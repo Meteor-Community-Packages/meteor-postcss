@@ -19,8 +19,8 @@ $ meteor add juliancwirko:postcss
 
 #### 2. Add PostCSS plugins:
 
-    1. Create local package in the /packages folder - name it as you want
-    2. Inside the `package.js` file define Npm packages which are PostCSS's plugins. Example of package.js file:
+1. Create local package in the /packages folder - name it as you want
+2. Inside the `package.js` file define Npm packages which are PostCSS's plugins. Example of package.js file:
 
 ```
 Package.describe({
