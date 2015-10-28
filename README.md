@@ -91,3 +91,7 @@ Npm.require("autoprefixer")({add: false, browsers: []});
 2. I think that the Build Plugins API in Meteor should be better documented :/
 
 3. I realy want to use `.css` extension :/
+
+### Demo test repo
+
+- [https://github.com/juliancwirko/meteor-postcss-test](https://github.com/juliancwirko/meteor-postcss-test)
