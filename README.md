@@ -1,23 +1,25 @@
 ## Use PostCSS with Meteor - Package
 
-(WIP package - experiments and questions)
-
-### Questions
-
-1. How to hook PostCSS to `.css` extension in Meteor build plugin? It will be cool if we could use for example Stylus as an separated build plugin and then PostCSS on generated css.
-2. How to load custom PostCSS plugins without changing the main PostCSS build plugin file?
-
-Here is what I've got till now:
+Meteor Minifiers with PostCSS processing.
+With this package you can use PostCSS plugins on .css files. You can add your custom plugins by adding local Meteor package. Read more below...
 
 ### Usage
 
-#### 1. Add the PostCSS package:
+#### 1. Remove `standard-minifiers` package
+
+```
+$ meteor remove standard-minifiers
+```
+
+#### 2. Add `juliancwirko:postcss` package
 
 ```
 $ meteor add juliancwirko:postcss
 ```
 
-#### 2. Add PostCSS plugins:
+Don't worry, you will get standard js minifier and css with PostCSS porcessing minifier. For now there isn't any way in Meteor to replace only the css minifier so js minifier is just copied from `standard-minifiers` package. The css one is changed to allow PostCSS processing and all other stuff works the same (merge, minification etc.).
+
+#### 3. Add PostCSS plugins:
 
 1. Create local package in the /packages folder - name it as you want
 2. Inside the `package.js` file define Npm packages which are PostCSS's plugins. Example of package.js file:
@@ -44,7 +46,7 @@ This is all what you need in this Meteor package. Now add the new created packag
 $ meteor add juliancwirko:postcss-plugins
 ```
 
-#### 3. Create config file `postcss.json` in the root app folder. Example of config file:
+#### 4. Create config file `postcss.json` in the root app folder. Example of config file:
 
 ```
 {
@@ -53,7 +55,11 @@ $ meteor add juliancwirko:postcss-plugins
             "options": {},
             "dirName": "juliancwirko:postcss-plugins"
         }, {
-            "name": "autoprefixer",
+            "name": "postcss-nested",
+            "options": {},
+            "dirName": "juliancwirko:postcss-plugins"
+        }, {
+            "name": "postcss-simple-vars",
             "options": {},
             "dirName": "juliancwirko:postcss-plugins"
         }, {
@@ -61,11 +67,7 @@ $ meteor add juliancwirko:postcss-plugins
             "options": {},
             "dirName": "juliancwirko:postcss-plugins"
         }, {
-            "name": "postcss-nested",
-            "options": {},
-            "dirName": "juliancwirko:postcss-plugins"
-        }, {
-            "name": "postcss-simple-vars",
+            "name": "autoprefixer",
             "options": {},
             "dirName": "juliancwirko:postcss-plugins"
         }
@@ -81,22 +83,28 @@ Npm.require("autoprefixer")({add: false, browsers: []});
 ```
 - `dirName` - we need to point where are node_modules folders, we need to pass local package folder name here
 
-#### 4. Create your first `.pcss` files. Yes `.pcss`, unfortunately we can't use `.css` extension here :/
+#### 5. Create your standard `.css` files with additional features according to PostCSS plugins you use.
 
 
-### Sum up
+### Imports with PostCSS
 
-1. Can we do this simpler. Is there a way to customize our Meteor build plugins by adding new npm packages from outside the package?
+You can use imports with [postcss-import](https://github.com/postcss/postcss-import) plugin. Although I need to do more tests on this one. For the demo app it works. Also we need to test other PostCSS plugins. **Remember that postcss-import plugin should be loaded first (in postcss.json)**.
 
-2. I think that the Build Plugins API in Meteor should be better documented :/
+You need to use `.import.css` extension and standard import like with preprocessors `@import "my-file.import.css";` Files with `.import.css` will be ommited by css minifier from this package.
 
-3. I realy want to use `.css` extension :/
+### Usage with preprocessors like Stylus and Sass
+
+You can use it with your favourite preprocessor. There is an example in the demo app.
+
+You should be able to use PostCSS plugins syntax in the .styl or .scss files too. (Tested only with Stylus).
 
 ### Demo test repo
 
 - [https://github.com/juliancwirko/meteor-postcss-test](https://github.com/juliancwirko/meteor-postcss-test)
 - [Discussion and updates](https://forums.meteor.com/t/postcss-package-and-meteor-build-plugin-questions/12454?u=juliancwirko)
 
-### Todo
+### License
 
-- hook all into Meteor minifiers with .css extension
+MIT
+
+PR and ideas are welcomed.
