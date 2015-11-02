@@ -94,7 +94,7 @@ You need to use `.import.css` extension and standard import like with preprocess
 
 ### Usage with preprocessors like Stylus and Sass
 
-You can use it with your favourite preprocessor. There is an example in the demo app.
+You can use it side by side with your favourite preprocessor. There is an example in the demo app.
 
 You should be able to use PostCSS plugins syntax in the .styl or .scss files too. (Tested only with Stylus).
 
