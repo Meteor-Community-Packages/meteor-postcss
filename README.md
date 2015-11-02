@@ -21,70 +21,37 @@ Don't worry, you will get standard js minifier and css with PostCSS porcessing m
 
 #### 3. Add PostCSS plugins:
 
-1. Create local package in the /packages folder - name it as you want
-2. Inside the `package.js` file define Npm packages which are PostCSS's plugins. Example of package.js file:
+This package uses [meteorhacks:npm](https://github.com/meteorhacks/npm) package for managing npm packages in Meteor. So if you add juliancwirko:postcss it will also add meteorhacks:npm. When you run your Meteor app there will be `packages.json` file created in the root of your app. You can specify PostCSS plugins there (standard npm packages). Example:
 
-```
-Package.describe({
-    summary: 'PostCSS default plugins set',
-    version: '0.0.1',
-    name: 'juliancwirko:postcss-plugins',
-    git: ''
-});
-
-Npm.depends({
-    'autoprefixer': '6.0.3',
-    'rucksack-css': '0.8.5',
-    'postcss-nested': '1.0.0',
-    'postcss-import': '7.1.0',
-    'postcss-simple-vars': '1.0.1'
-});
-
-```
-This is all what you need in this Meteor package. Now add the new created package:
-```
-$ meteor add juliancwirko:postcss-plugins
-```
-
-#### 4. Create config file `postcss.json` in the root app folder. Example of config file:
-
+**packages.json (PostCSS plugins):**
 ```
 {
-    "plugins": [{
-            "name": "postcss-import",
-            "options": {},
-            "dirName": "juliancwirko:postcss-plugins"
-        }, {
-            "name": "postcss-nested",
-            "options": {},
-            "dirName": "juliancwirko:postcss-plugins"
-        }, {
-            "name": "postcss-simple-vars",
-            "options": {},
-            "dirName": "juliancwirko:postcss-plugins"
-        }, {
-            "name": "rucksack-css",
-            "options": {},
-            "dirName": "juliancwirko:postcss-plugins"
-        }, {
-            "name": "autoprefixer",
-            "options": {},
-            "dirName": "juliancwirko:postcss-plugins"
-        }
-    ]
+    "postcss-import": "7.1.0",
+    "postcss-nested": "1.0.0",
+    "postcss-simple-vars": "1.0.1",
+    "autoprefixer": "6.0.3",
+    "rucksack-css": "0.8.5"
 }
 ```
-Explanation:
 
-- `name` - PostCSS plugin name needed in PostCSS plugins API inside the build plugin (this is dynamic so we need to pass it somewhere)
-- `options` - PostCSS plugins has options which you can pass. Like for example Autoprefixer
+Restart your app.
+
+#### 4. If you need to pass some options to your PostCSS plugins create options file `postcss.json` in the root app folder.
+
+Example of options file (Example: we have some plugins but we need to pass options only for autoprefixer):
+
+**postcss.json (PostCSS plugins options - this file is optional):**
 ```
-Npm.require("autoprefixer")({add: false, browsers: []});
+{
+    "pluginsOptions": {
+        "autoprefixer": {"browsers": ["last 2 versions"]}
+    }
+}
 ```
-- `dirName` - we need to point where are node_modules folders, we need to pass local package folder name here
+
+You can add more plugins here.
 
 #### 5. Create your standard `.css` files with additional features according to PostCSS plugins you use.
-
 
 ### Imports with PostCSS
 
@@ -107,4 +74,7 @@ You should be able to use PostCSS plugins syntax in the .styl or .scss files too
 
 MIT
 
-PR and ideas are welcomed.
+### TODO
+
+- tests
+- PR and ideas are welcomed.

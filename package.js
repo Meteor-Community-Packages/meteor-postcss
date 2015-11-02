@@ -1,6 +1,6 @@
 Package.describe({
     summary: 'Minifiers for Meteor with PostCSS processing',
-    version: '0.1.0',
+    version: '0.2.0',
     name: 'juliancwirko:postcss',
     git: 'https://github.com/juliancwirko/meteor-postcss.git'
 });
@@ -23,6 +23,7 @@ Package.registerBuildPlugin({
 });
 
 Package.onUse(function(api) {
+    api.use('meteorhacks:npm@1.5.0', ['client']);
     api.use('isobuild:minifier-plugin@1.0.0');
 });
 
