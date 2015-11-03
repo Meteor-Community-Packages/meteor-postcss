@@ -1,6 +1,6 @@
 Package.describe({
     summary: 'Minifiers for Meteor with PostCSS processing',
-    version: '0.2.0',
+    version: '0.2.1',
     name: 'juliancwirko:postcss',
     git: 'https://github.com/juliancwirko/meteor-postcss.git'
 });
@@ -8,6 +8,7 @@ Package.describe({
 Package.registerBuildPlugin({
     name: 'minifiers-postcss',
     use: [
+        'ecmascript@0.1.6',
         'minifiers@1.1.7'
     ],
     npmDependencies: {

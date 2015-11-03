@@ -35,6 +35,8 @@ This package uses [meteorhacks:npm](https://github.com/meteorhacks/npm) package 
 ```
 
 Restart your app.
+Of course you can use `meteorhacks:npm` for other stuff.
+PostCSS will know which Npm packages are PostCSS plugins and which aren't.
 
 #### 4. If you need to pass some options to your PostCSS plugins create options file `postcss.json` in the root app folder.
 
