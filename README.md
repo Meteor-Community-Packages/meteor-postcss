@@ -29,10 +29,12 @@ This package uses [meteorhacks:npm](https://github.com/meteorhacks/npm) package 
     "postcss-import": "7.1.0",
     "postcss-nested": "1.0.0",
     "postcss-simple-vars": "1.0.1",
-    "autoprefixer": "6.0.3",
-    "rucksack-css": "0.8.5"
+    "rucksack-css": "0.8.5",
+    "autoprefixer": "6.0.3"
 }
 ```
+
+**(Order here is important. For example 'postcss-import' should be always first PostCSS plugin on the list and 'autoprefixer' should be the last PostCSS plugin on the list.)**
 
 Restart your app.
 Of course you can use `meteorhacks:npm` for other stuff.
@@ -52,6 +54,8 @@ Example of options file (Example: we have some plugins but we need to pass optio
 ```
 
 You can add more plugins here.
+
+If you want to change something in postcss.json config file later, you should restart your app and also change any .css file to rerun build plugin.
 
 #### 5. Create your standard `.css` files with additional features according to PostCSS plugins you use.
 
