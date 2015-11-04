@@ -84,3 +84,7 @@ MIT
 
 - tests
 - PR and ideas are welcomed.
+
+### Also check out:
+
+- [sGrid - Flexbox Grid System for Stylus with PostCSS](https://atmospherejs.com/juliancwirko/s-grid)
