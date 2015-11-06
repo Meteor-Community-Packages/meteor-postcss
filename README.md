@@ -3,6 +3,8 @@
 Meteor Minifiers with [PostCSS](https://github.com/postcss/postcss) processing.
 With this package you can use PostCSS plugins on .css files. You can add your custom plugins by adding local Meteor package. Read more below...
 
+- Blog post: [How to use PostCSS in Meteor](http://julian.io/how-to-use-postcss-in-meteor/)
+
 ### Usage
 
 #### 1. Remove `standard-minifiers` package
