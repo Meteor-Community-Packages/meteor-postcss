@@ -1,7 +1,10 @@
 ## Use PostCSS with Meteor - Package
 
 Meteor Minifiers with [PostCSS](https://github.com/postcss/postcss) processing.
-With this package you can use PostCSS plugins on .css files. You can add your custom plugins by adding local Meteor package. Read more below...
+
+This package allows you to use PostCSS plugins with **.css files**. You can add your custom plugins by adding Npm packages using meteorhacks:npm. You can also use your favourite preprocessor side by side with this package. It allows you to enable many PostCSS plugins, for example **Autoprefixer** for all preprocessors you use. (Of course you can use it whithout any preprocessor too).
+
+Read more below...
 
 - Blog post: [How to use PostCSS in Meteor](http://julian.io/how-to-use-postcss-in-meteor/)
 
