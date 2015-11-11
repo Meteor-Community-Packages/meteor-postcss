@@ -31,11 +31,11 @@ This package uses [meteorhacks:npm](https://github.com/meteorhacks/npm) package 
 **packages.json (PostCSS plugins):**
 ```
 {
-    "postcss-import": "7.1.0",
+    "postcss-import": "7.1.3",
     "postcss-nested": "1.0.0",
-    "postcss-simple-vars": "1.0.1",
+    "postcss-simple-vars": "1.1.0",
     "rucksack-css": "0.8.5",
-    "autoprefixer": "6.0.3"
+    "autoprefixer": "6.1.0"
 }
 ```
 
