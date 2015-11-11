@@ -93,3 +93,7 @@ MIT
 ### Also check out:
 
 - [sGrid - Flexbox Grid System for Stylus with PostCSS](https://atmospherejs.com/juliancwirko/s-grid)
+
+### Changelog
+
+- v0.2.2 PostCSS version bump - [performance improvements](https://evilmartians.com/chronicles/postcss-1_5x-faster)
