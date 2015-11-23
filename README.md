@@ -96,4 +96,5 @@ MIT
 
 ### Changelog
 
-- v0.2.2 PostCSS version bump - [performance improvements](https://evilmartians.com/chronicles/postcss-1_5x-faster)
+- v0.2.3 PostCSS (v5.0.12) version bump
+- v0.2.2 PostCSS (v5.0.11) version bump - [performance improvements](https://evilmartians.com/chronicles/postcss-1_5x-faster)
