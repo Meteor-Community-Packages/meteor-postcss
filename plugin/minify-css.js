@@ -115,11 +115,23 @@ var mergeCss = function (css) {
         var postres;
 
         postCSS(getPostCSSPlugins())
-        .process(file.getContentsAsString(), {
-            from: process.cwd() + file._source.url
-        }).then(function (result) {
-            f.return(result);
-        });
+            .process(file.getContentsAsString(), {
+                from: process.cwd() + file._source.url
+            })
+            .then(function (result) {
+                result.warnings().forEach(function (warn) {
+                    process.stderr.write(warn.toString());
+                });
+                f.return(result);
+            })
+            .catch(function (error) {
+                var errMsg = error.message;
+                if (error.name === 'CssSyntaxError') {
+                    errMsg = error.message + '\n\n' + 'Css Syntax Error.' + '\n\n' + error.message + error.showSourceCode()
+                }
+                error.message = errMsg;
+                f.return(error);
+            });
 
         try {
             var parseOptions = {
@@ -128,12 +140,24 @@ var mergeCss = function (css) {
             };
 
             postres = f.wait();
+
+            if (postres.name === 'CssSyntaxError') {
+                throw postres;
+            }
+
             css = postres.css;
 
             var ast = CssTools.parseCss(css, parseOptions);
             ast.filename = filename;
         } catch (e) {
-            if (e.reason) {
+
+            if (e.name === 'CssSyntaxError') {
+                file.error({
+                    message: e.message,
+                    line: e.line,
+                    column: e.column
+                });
+            } else if (e.reason) {
                 file.error({
                     message: e.reason,
                     line: e.line,

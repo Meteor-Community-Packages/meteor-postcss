@@ -35,7 +35,7 @@ This package uses [meteorhacks:npm](https://github.com/meteorhacks/npm) package 
     "postcss-nested": "1.0.0",
     "postcss-simple-vars": "1.1.0",
     "rucksack-css": "0.8.5",
-    "autoprefixer": "6.1.0"
+    "autoprefixer": "6.1.2"
 }
 ```
 
@@ -96,5 +96,6 @@ MIT
 
 ### Changelog
 
+- v0.2.4 Catch PostCSS 'CssSyntaxError' [#3](https://github.com/juliancwirko/meteor-postcss/issues/3)
 - v0.2.3 PostCSS (v5.0.12) version bump
 - v0.2.2 PostCSS (v5.0.11) version bump - [performance improvements](https://evilmartians.com/chronicles/postcss-1_5x-faster)
