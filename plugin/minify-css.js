@@ -1,5 +1,3 @@
-Npm.require('es6-promise').polyfill();
-
 var appModulePath = Npm.require('app-module-path');
 appModulePath.addPath(process.cwd() + '/packages/npm-container/.npm/package/node_modules/');
 
