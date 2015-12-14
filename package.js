@@ -14,7 +14,6 @@ Package.registerBuildPlugin({
     npmDependencies: {
         'source-map': '0.5.3',
         'postcss': '5.0.12',
-        'es6-promise': '3.0.2',
         'app-module-path': '1.0.5'
     },
     sources: [
