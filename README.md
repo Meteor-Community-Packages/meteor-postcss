@@ -56,7 +56,7 @@ Remember to run `npm install` or `npm update` after changes.
 
 Example of options file (Example: we have some plugins but we need to pass options only for autoprefixer):
 
-**postcss.json (PostCSS plugins options - this file is optional):**
+**package.json (PostCSS plugins options - this file is optional):**
 ```
 {
   "name": "demo",
