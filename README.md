@@ -1,8 +1,10 @@
 ## Use PostCSS with Meteor - Package
 
-Meteor Minifiers with [PostCSS](https://github.com/postcss/postcss) processing.
+Meteor CSS Minifiers with [PostCSS](https://github.com/postcss/postcss) processing.
 
-This package allows you to use PostCSS plugins with **.css files**. You can add your custom plugins by adding Npm packages using meteorhacks:npm. You can also use your favourite preprocessor side by side with this package. It allows you to enable many PostCSS plugins, for example **Autoprefixer** for all preprocessors you use. (Of course you can use it whithout any preprocessor too).
+**Version 1.0.0 is for Meteor 1.3 and above. For older Meteor versions you can use 0.2.5.**
+
+This package allows you to use PostCSS plugins with **.css files**. You can add your custom plugins by adding Npm packages using `package.json`. You can also use your favourite preprocessor side by side with this package. It allows you to enable many PostCSS plugins, for example **Autoprefixer** for all preprocessors you use. (Of course you can use it whithout any preprocessor too).
 
 Read more below...
 
@@ -17,51 +19,73 @@ Read more below...
 $ meteor remove standard-minifiers
 ```
 
-#### 2. Add `juliancwirko:postcss` package
+#### 2. Add `juliancwirko:postcss` and also `standard-minifiers-js` package
 
 ```
 $ meteor add juliancwirko:postcss
+$ meteor add standard-minifiers-js
 ```
-
-Don't worry, you will get standard js minifier and css with PostCSS porcessing minifier. For now there isn't any way in Meteor to replace only the css minifier so js minifier is just copied from `standard-minifiers` package. The css one is changed to allow PostCSS processing and all other stuff works the same (merge, minification etc.).
+We need to add `standard-minifiers-js` because we have removed `standard-minifiers` package.
+Don't worry, you will get standard-minifiers-css with PostCSS porcessing minifier.
 
 #### 3. Add PostCSS plugins:
 
-This package uses [meteorhacks:npm](https://github.com/meteorhacks/npm) package for managing npm packages in Meteor. So if you add juliancwirko:postcss it will also add meteorhacks:npm. When you run your Meteor app there will be `packages.json` file created in the root of your app. You can specify PostCSS plugins there (standard npm packages). Example:
+From Meteor 1.3 you can use standard NPM `package.json`. You can add PostCSS plugins in `devDependencies`.
 
-**packages.json (PostCSS plugins):**
+**package.json (PostCSS plugins):**
 ```
 {
-    "postcss-import": "7.1.3",
-    "postcss-nested": "1.0.0",
-    "postcss-simple-vars": "1.1.0",
-    "rucksack-css": "0.8.5",
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
     "autoprefixer": "6.1.2"
+  },
 }
 ```
 
 **(Order here is important. For example 'postcss-import' should be always first PostCSS plugin on the list and 'autoprefixer' should be the last PostCSS plugin on the list.)**
 
-Restart your app.
-Of course you can use `meteorhacks:npm` for other stuff.
 PostCSS will know which Npm packages are PostCSS plugins and which aren't.
 
-#### 4. If you need to pass some options to your PostCSS plugins create options file `postcss.json` in the root app folder.
+Remember to run `npm install` or `npm update` after changes.
+
+#### 4. If you need to pass some options to your PostCSS plugins create `postcss` key in `package.json`
 
 Example of options file (Example: we have some plugins but we need to pass options only for autoprefixer):
 
 **postcss.json (PostCSS plugins options - this file is optional):**
 ```
 {
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "postcss-import": "7.1.3",
+    "postcss-nested": "1.0.0",
+    "postcss-simple-vars": "1.2.0",
+    "rucksack-css": "0.8.5",
+    "autoprefixer": "6.3.1"
+  },
+  "postcss": {
     "pluginsOptions": {
-        "autoprefixer": {"browsers": ["last 2 versions"]}
+      "postcss-import": {},
+      "postcss-nested": {},
+      "postcss-simple-vars": {},
+      "rucksack-css": {},
+      "autoprefixer": {"browsers": ["last 2 versions"]}
     }
+  }
 }
 ```
 
 You can add more plugins here.
 
-If you want to change something in postcss.json config file later, you should restart your app and also change any .css file to rerun build plugin.
+If you want to change something in postcss config later, you should restart your app and also change any .css file to rerun build plugin.
 
 #### 5. Create your standard `.css` files with additional features according to PostCSS plugins you use.
 
@@ -97,6 +121,7 @@ MIT
 
 ### Changelog
 
+- v1.0.0 Modifications for Meteor 1.3
 - v0.2.5 Removed Promise Polyfill [#4](https://github.com/juliancwirko/meteor-postcss/pull/4)
 - v0.2.4 Catch PostCSS 'CssSyntaxError' [#3](https://github.com/juliancwirko/meteor-postcss/issues/3)
 - v0.2.3 PostCSS (v5.0.12) version bump

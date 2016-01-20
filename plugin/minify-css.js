@@ -1,5 +1,5 @@
 var appModulePath = Npm.require('app-module-path');
-appModulePath.addPath(process.cwd() + '/packages/npm-container/.npm/package/node_modules/');
+appModulePath.addPath(process.cwd() + '/node_modules/');
 
 var Future = Npm.require('fibers/future');
 var fs = Plugin.fs;
@@ -14,11 +14,9 @@ Plugin.registerMinifier({
     return minifier;
 });
 
-var PACKAGES_FILE = 'packages.json';
-var CONFIG_FILE_NAME = 'postcss.json';
+var PACKAGES_FILE = 'package.json';
 
-var packagesFile = path.resolve(process.cwd(), PACKAGES_FILE);
-var projectOptionsFile = path.resolve(process.cwd(), CONFIG_FILE_NAME);
+var packageFile = path.resolve(process.cwd(), PACKAGES_FILE);
 
 var loadJSONFile = function (filePath) {
     var content = fs.readFileSync(filePath);
@@ -33,11 +31,9 @@ var loadJSONFile = function (filePath) {
 var configPackages = {};
 var configOptions = {};
 
-if (fs.existsSync(packagesFile)) {
-    configPackages = loadJSONFile(packagesFile);
-}
-if (fs.existsSync(projectOptionsFile)) {
-    configOptions = loadJSONFile(projectOptionsFile);
+if (fs.existsSync(packageFile)) {
+    configPackages = loadJSONFile(packageFile).devDependencies;
+    configOptions = loadJSONFile(packageFile).postcss;
 }
 
 var getPostCSSPlugins = function () {
