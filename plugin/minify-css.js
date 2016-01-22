@@ -10,7 +10,7 @@ var sourcemap = Npm.require('source-map');
 Plugin.registerMinifier({
     extensions: ["css"]
 }, function () {
-    var minifier = new CssToolsMinifier();
+    const minifier = new CssToolsMinifier();
     return minifier;
 });
 
@@ -19,7 +19,7 @@ var PACKAGES_FILE = 'package.json';
 var packageFile = path.resolve(process.cwd(), PACKAGES_FILE);
 
 var loadJSONFile = function (filePath) {
-    var content = fs.readFileSync(filePath);
+    const content = fs.readFileSync(filePath);
     try {
         return JSON.parse(content);
     } catch (e) {
@@ -28,22 +28,20 @@ var loadJSONFile = function (filePath) {
     }
 };
 
-var configPackages = {};
-var configOptions = {};
+var postcssConfigPlugins = {};
 
 if (fs.existsSync(packageFile)) {
-    configPackages = loadJSONFile(packageFile).devDependencies;
-    configOptions = loadJSONFile(packageFile).postcss;
+    const jsonContent = loadJSONFile(packageFile);
+    postcssConfigPlugins = jsonContent.postcss && jsonContent.postcss.plugins;
 }
 
 var getPostCSSPlugins = function () {
-    var plugins = [];
-    var pluginsOptions = configOptions.pluginsOptions;
-    if (configPackages) {
-        Object.keys(configPackages).forEach(function (pluginName) {
+    let plugins = [];
+    if (postcssConfigPlugins) {
+        Object.keys(postcssConfigPlugins).forEach(function (pluginName) {
             let postCSSPlugin = Npm.require(pluginName);
             if (postCSSPlugin.name === 'creator' && postCSSPlugin().postcssPlugin) {
-                plugins.push(postCSSPlugin(pluginsOptions ? pluginsOptions[pluginName] : {}));
+                plugins.push(postCSSPlugin(postcssConfigPlugins ? postcssConfigPlugins[pluginName] : {}));
             }
         });
     }
