@@ -40,7 +40,7 @@ var getPostCSSPlugins = function () {
     if (postcssConfigPlugins) {
         Object.keys(postcssConfigPlugins).forEach(function (pluginName) {
             let postCSSPlugin = Npm.require(pluginName);
-            if (postCSSPlugin.name === 'creator' && postCSSPlugin().postcssPlugin) {
+            if (postCSSPlugin && postCSSPlugin.name === 'creator' && postCSSPlugin().postcssPlugin) {
                 plugins.push(postCSSPlugin(postcssConfigPlugins ? postcssConfigPlugins[pluginName] : {}));
             }
         });
