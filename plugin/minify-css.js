@@ -8,7 +8,7 @@ var postCSS = Npm.require('postcss');
 var sourcemap = Npm.require('source-map');
 
 Plugin.registerMinifier({
-    extensions: ["css"]
+    extensions: ['css']
 }, function () {
     const minifier = new CssToolsMinifier();
     return minifier;
