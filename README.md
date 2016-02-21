@@ -16,20 +16,17 @@ Read more below...
 
 ### Usage
 
-#### 1. Remove `standard-minifiers` package
+#### 1. Remove `standard-minifier-css` package
 
 ```
-$ meteor remove standard-minifiers
+$ meteor remove standard-minifier-css
 ```
 
-#### 2. Add `juliancwirko:postcss` and also `standard-minifiers-js` package
+#### 2. Add `juliancwirko:postcss` package
 
 ```
 $ meteor add juliancwirko:postcss
-$ meteor add standard-minifiers-js
 ```
-We need to add `standard-minifiers-js` because we have removed `standard-minifiers` package.
-Don't worry, you will get standard-minifiers-css with PostCSS porcessing minifier.
 
 #### 3. Add PostCSS plugins:
 
@@ -107,7 +104,7 @@ Remember to move your all configuration entries from `packages.json` and `postcs
 
 **Remove the package by `meteor remove juliancwirko:postcss` and add it again `meteor add juliancwirko:postcss@1.0.0`** it should install current version.
 
-Then you should also add standard-minifiers-js `meteor add standard-minifiers-js`. This is because in Meteor 1.3 there are 2 separate packages for css and js minifiers and the css one is included in juliancwirko:postcss. Previously there was also js minifier. Now it is removed so you need to add it by hand.
+Make sure that you have standard-minifier-js package installed, if not add it by `meteor add standard-minifier-js`. Also make sure that you don't have standard-minifier**s**-js package (there was a name change). In Meteor 1.3 there are 2 separate packages for css and js minifiers and the css one is included in juliancwirko:postcss. Previously there was also js minifier. Now it is removed so you need to add it by hand.
 
 ### License
 
