@@ -2,7 +2,7 @@
 
 Meteor CSS Minifiers with [PostCSS](https://github.com/postcss/postcss) processing.
 
-**This is a 1.0.0-beta.11** (For Meteor 1.3-beta.11 As soon as there will be Meteor 1.3 I'll push version 1.0.0). To install beta version you need run: `meteor add juliancwirko:postcss@1.0.0-beta.11` Also check out migration guide at the bottom.
+**This is a 1.0.0-rc.2** (For Meteor 1.3-rc.2 As soon as there will be Meteor 1.3 I'll push version 1.0.0). To install beta version you need run: `meteor add juliancwirko:postcss@1.0.0-rc.2` Also check out migration guide at the bottom.
 
 **Version 1.0.0 is for Meteor 1.3 and above. For older Meteor versions you can use 0.2.5.**
 
@@ -46,9 +46,9 @@ See example:
   "description": "",
   "author": "",
   "devDependencies": {
-    "autoprefixer": "^6.3.1",
-    "mocha": "^2.3.4",
-    "postcss-import": "^7.1.3",
+    "autoprefixer": "^6.3.3",
+    "mocha": "^2.4.5",
+    "postcss-import": "^8.0.2",
     "postcss-nested": "^1.0.0",
     "postcss-simple-vars": "^1.2.0",
     "rucksack-css": "^0.8.5"
@@ -121,6 +121,7 @@ MIT
 
 ### Changelog
 
+- v1.0.0-rc.2 Version bump for Meteor 1.3 rc 2
 - v1.0.0-beta.11 Versions bump for Meteor 1.3 beta 11
 - v1.0.0-beta.1 Modifications for Meteor 1.3 beta 4
 - v0.2.5 Removed Promise Polyfill [#4](https://github.com/juliancwirko/meteor-postcss/pull/4)
