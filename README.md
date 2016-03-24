@@ -2,7 +2,7 @@
 
 Meteor CSS Minifiers with [PostCSS](https://github.com/postcss/postcss) processing.
 
-**This is a 1.0.0-rc.4** (For Meteor 1.3-rc.4 As soon as there will be Meteor 1.3 I'll push version 1.0.0). To install beta version you need run: `meteor add juliancwirko:postcss@1.0.0-rc.4` Also check out migration guide at the bottom.
+**This is a 1.0.0-rc.10** (For Meteor 1.3-rc.10 As soon as there will be Meteor 1.3 I'll push version 1.0.0). To install beta version you need run: `meteor add juliancwirko:postcss@1.0.0-rc.10` Also check out migration guide at the bottom.
 
 **Version 1.0.0 is for Meteor 1.3 and above. For older Meteor versions you can use 0.2.5.**
 
@@ -46,7 +46,7 @@ See example:
   "description": "",
   "author": "",
   "devDependencies": {
-    "autoprefixer": "^6.3.3",
+    "autoprefixer": "^6.3.4",
     "mocha": "^2.4.5",
     "postcss-import": "^8.0.2",
     "postcss-nested": "^1.0.0",
@@ -121,6 +121,7 @@ MIT
 
 ### Changelog
 
+- v1.0.0-rc.10 Version bump for Meteor 1.3 rc 10
 - v1.0.0-rc.4 Version bump for Meteor 1.3 rc 4
 - v1.0.0-rc.2 Version bump for Meteor 1.3 rc 2
 - v1.0.0-beta.11 Versions bump for Meteor 1.3 beta 11
