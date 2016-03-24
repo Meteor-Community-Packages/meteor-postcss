@@ -79,6 +79,8 @@ You can use imports with [postcss-import](https://github.com/postcss/postcss-imp
 
 You need to use `.import.css` extension and standard import like with preprocessors `@import "my-file.import.css";` Files with `.import.css` will be ommited by css minifier from this package.
 
+Imports from Meteor packages will not work. But there is a good news too. from Meteor 1.3 you can use standard Npm packages and imports from `node_modules` should work. So you will be able to import css files from instaled Npm packages. You will be able to do something like: `@import 'my-npm-lib/styles.css'`;
+
 ### Usage with preprocessors like Stylus and Sass
 
 You can use it side by side with your favourite preprocessor. There is an example in the demo app.
