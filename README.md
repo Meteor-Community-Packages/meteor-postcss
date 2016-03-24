@@ -1,6 +1,6 @@
 ## Use PostCSS with Meteor - Package
 
-**Update:** There is [rc version 1.0.0-rc.4 for Meteor 1.3-rc.4](https://github.com/juliancwirko/meteor-postcss/tree/meteor-1.3-in-progress) it is also published on Atmosphere.
+**Update:** There is [rc version 1.0.0-rc.10 for Meteor 1.3-rc.10](https://github.com/juliancwirko/meteor-postcss/tree/meteor-1.3-in-progress) it is also published on Atmosphere.
 
 Meteor Minifiers with [PostCSS](https://github.com/postcss/postcss) processing.
 
@@ -73,6 +73,8 @@ If you want to change something in postcss.json config file later, you should re
 You can use imports with [postcss-import](https://github.com/postcss/postcss-import) plugin. Although I need to do more tests on this one. For the demo app it works. Also we need to test other PostCSS plugins. **Remember that postcss-import plugin should be loaded first (so put it on the first place in the packages.json file)**.
 
 You need to use `.import.css` extension and standard import like with preprocessors `@import "my-file.import.css";` Files with `.import.css` will be ommited by css minifier from this package.
+
+Imports from Meteor packages will not work. But there is a good news too. from Meteor 1.3 you can use standard Npm packages and imports from `node_modules` should work. So you will be able to import css files from instaled Npm packages. You will be able to do something like: `@import 'my-npm-lib/styles.css'`;
 
 ### Usage with preprocessors like Stylus and Sass
 
