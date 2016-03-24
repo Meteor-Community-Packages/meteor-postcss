@@ -48,14 +48,14 @@ See example:
   "devDependencies": {
     "autoprefixer": "^6.3.4",
     "mocha": "^2.4.5",
-    "postcss-import": "^8.0.2",
+    "postcss-easy-import": "^1.0.1",
     "postcss-nested": "^1.0.0",
     "postcss-simple-vars": "^1.2.0",
     "rucksack-css": "^0.8.5"
   },
   "postcss": {
     "plugins": {
-      "postcss-import": {},
+      "postcss-easy-import": {},
       "postcss-nested": {},
       "postcss-simple-vars": {},
       "rucksack-css": {},
@@ -73,9 +73,34 @@ If you want to change something in postcss config later, you should restart your
 
 #### 4. Create your standard `.css` files with additional features according to PostCSS plugins you use.
 
+### PostCSS parsers
+
+From version 1.0.0 you can configure parser for PostCSS. To do this you can add `parser` key in the `package.json` file. Let's see an example:
+
+```
+{
+  "name": "demo PostCSS app",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "devDependencies": {
+    "autoprefixer": "^6.3.4",
+    "postcss-safe-parser": "^1.0.7"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {"browsers": ["last 2 versions"]}
+    },
+    "parser": "postcss-safe-parser"
+  }
+}
+```
+
+As you can see we use here `postcss-safe-parser` which will repair broken css syntax. This is just one example. You can find a list of parsers here: [https://github.com/postcss/postcss#syntaxes](https://github.com/postcss/postcss#syntaxes). You can use `postcss-scss` parser or `postcss-less` parser.
+
 ### Imports with PostCSS
 
-You can use imports with [postcss-import](https://github.com/postcss/postcss-import) plugin. Although I need to do more tests on this one. For the demo app it works. Also we need to test other PostCSS plugins. **Remember that postcss-import plugin should be loaded first (so put it on the first place in the packages.json file)**.
+You can use imports with [postcss-easy-import](https://github.com/postcss/postcss-easy-import) plugin. **Remember that postcss-easy-import plugin should be loaded first (so put it on the first place in the packages.json file)**.
 
 You need to use `.import.css` extension and standard import like with preprocessors `@import "my-file.import.css";` Files with `.import.css` will be ommited by css minifier from this package.
 

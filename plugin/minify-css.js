@@ -29,10 +29,12 @@ var loadJSONFile = function (filePath) {
 };
 
 var postcssConfigPlugins = {};
+var postcssConfigParser = {};
 
 if (fs.existsSync(packageFile)) {
     const jsonContent = loadJSONFile(packageFile);
     postcssConfigPlugins = jsonContent.postcss && jsonContent.postcss.plugins;
+    postcssConfigParser = jsonContent.postcss && jsonContent.postcss.parser;
 }
 
 var getPostCSSPlugins = function () {
@@ -46,6 +48,14 @@ var getPostCSSPlugins = function () {
         });
     }
     return plugins;
+};
+
+var getPostCSSParser = function () {
+    let parser = null;
+    if (postcssConfigParser) {
+        parser = Npm.require(postcssConfigParser);
+    }
+    return parser;
 };
 
 var isNotImport = function (inputFileUrl) {
@@ -108,7 +118,8 @@ var mergeCss = function (css) {
 
         postCSS(getPostCSSPlugins())
             .process(file.getContentsAsString(), {
-                from: process.cwd() + file._source.url
+                from: process.cwd() + file._source.url,
+                parser: getPostCSSParser()
             })
             .then(function (result) {
                 result.warnings().forEach(function (warn) {
