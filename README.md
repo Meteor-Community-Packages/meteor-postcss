@@ -1,6 +1,6 @@
 ## Use PostCSS with Meteor - Package
 
-**Update:** There is [rc version 1.0.0-rc.10 for Meteor 1.3-rc.10](https://github.com/juliancwirko/meteor-postcss/tree/meteor-1.3-in-progress) it is also published on Atmosphere.
+**Update:** There is [rc version 1.0.0-rc.12 for Meteor 1.3-rc.12](https://github.com/juliancwirko/meteor-postcss/tree/meteor-1.3-in-progress) it is also published on Atmosphere.
 
 Meteor Minifiers with [PostCSS](https://github.com/postcss/postcss) processing.
 
