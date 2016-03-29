@@ -1,5 +1,5 @@
 var appModulePath = Npm.require('app-module-path');
-appModulePath.addPath(process.cwd() + '/packages/npm-container/.npm/package/node_modules/');
+appModulePath.addPath(process.cwd() + '/node_modules/');
 
 var Future = Npm.require('fibers/future');
 var fs = Plugin.fs;
@@ -8,20 +8,18 @@ var postCSS = Npm.require('postcss');
 var sourcemap = Npm.require('source-map');
 
 Plugin.registerMinifier({
-    extensions: ["css"]
+    extensions: ['css']
 }, function () {
-    var minifier = new CssToolsMinifier();
+    const minifier = new CssToolsMinifier();
     return minifier;
 });
 
-var PACKAGES_FILE = 'packages.json';
-var CONFIG_FILE_NAME = 'postcss.json';
+var PACKAGES_FILE = 'package.json';
 
-var packagesFile = path.resolve(process.cwd(), PACKAGES_FILE);
-var projectOptionsFile = path.resolve(process.cwd(), CONFIG_FILE_NAME);
+var packageFile = path.resolve(process.cwd(), PACKAGES_FILE);
 
 var loadJSONFile = function (filePath) {
-    var content = fs.readFileSync(filePath);
+    const content = fs.readFileSync(filePath);
     try {
         return JSON.parse(content);
     } catch (e) {
@@ -30,28 +28,34 @@ var loadJSONFile = function (filePath) {
     }
 };
 
-var configPackages = {};
-var configOptions = {};
+var postcssConfigPlugins = {};
+var postcssConfigParser = {};
 
-if (fs.existsSync(packagesFile)) {
-    configPackages = loadJSONFile(packagesFile);
-}
-if (fs.existsSync(projectOptionsFile)) {
-    configOptions = loadJSONFile(projectOptionsFile);
+if (fs.existsSync(packageFile)) {
+    const jsonContent = loadJSONFile(packageFile);
+    postcssConfigPlugins = jsonContent.postcss && jsonContent.postcss.plugins;
+    postcssConfigParser = jsonContent.postcss && jsonContent.postcss.parser;
 }
 
 var getPostCSSPlugins = function () {
-    var plugins = [];
-    var pluginsOptions = configOptions.pluginsOptions;
-    if (configPackages) {
-        Object.keys(configPackages).forEach(function (pluginName) {
+    let plugins = [];
+    if (postcssConfigPlugins) {
+        Object.keys(postcssConfigPlugins).forEach(function (pluginName) {
             let postCSSPlugin = Npm.require(pluginName);
-            if (postCSSPlugin.name === 'creator' && postCSSPlugin().postcssPlugin) {
-                plugins.push(postCSSPlugin(pluginsOptions ? pluginsOptions[pluginName] : {}));
+            if (postCSSPlugin && postCSSPlugin.name === 'creator' && postCSSPlugin().postcssPlugin) {
+                plugins.push(postCSSPlugin(postcssConfigPlugins ? postcssConfigPlugins[pluginName] : {}));
             }
         });
     }
     return plugins;
+};
+
+var getPostCSSParser = function () {
+    let parser = null;
+    if (postcssConfigParser) {
+        parser = Npm.require(postcssConfigParser);
+    }
+    return parser;
 };
 
 var isNotImport = function (inputFileUrl) {
@@ -114,7 +118,8 @@ var mergeCss = function (css) {
 
         postCSS(getPostCSSPlugins())
             .process(file.getContentsAsString(), {
-                from: process.cwd() + file._source.url
+                from: process.cwd() + file._source.url,
+                parser: getPostCSSParser()
             })
             .then(function (result) {
                 result.warnings().forEach(function (warn) {
