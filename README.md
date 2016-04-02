@@ -96,6 +96,52 @@ From version 1.0.0 you can configure parser for PostCSS. To do this you can add 
 
 As you can see we use here `postcss-safe-parser` which will repair broken css syntax. This is just one example. You can find a list of parsers here: [https://github.com/postcss/postcss#syntaxes](https://github.com/postcss/postcss#syntaxes). You can use `postcss-scss` parser or `postcss-less` parser.
 
+### Exclude Meteor Packages
+
+Because PostCSS processes all CSS files in Meteor, it will also process CSS files from Meteor packages. This is good in most cases and will not break anything, but sometimes it could be problematic.
+
+If you have installed a package which is problematic and PostCSS plugins can't process the CSS files from that package you can exclude it in the process. See for example this issue: [#14](https://github.com/juliancwirko/meteor-postcss/issues/14). In this case you need to exclude `constellation:console` package because it uses not standard CSS in its files. PostCSS plugin can't process that file. You can exclude it so it will be not processed by PostCSS, but it will be still bundled as is.
+
+If you want to exclude a package you need to use `postcss.excludedPackages` key, see the example below:
+
+```
+{
+  "name": "demo PostCSS app",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "devDependencies": {
+    "autoprefixer": "^6.3.4",
+    "postcss-safe-parser": "^1.0.7"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {"browsers": ["last 2 versions"]}
+    },
+    "parser": "postcss-safe-parser",
+    "excludedPackages": ["constellation:console"]
+  }
+}
+```
+
+**Remember that you should provide a package name which contains a problematic CSS file and not global wrapper package** In this example you want to install `babrahams:constellation` but in fact the problematic package is `constellation:console` which is installed with `babrahams:constellation`. You'll find which package makes troubles by looking into the consolle errors. For example here we have something like:
+
+```
+While minifying app stylesheet:
+   packages/constellation_console/client/Constellation.css:118:3: postcss-simple-vars:
+   /workspace/meteor/postcss-demo/packages/constellation_console/client/Constellation.css:118:3: Undefined variable $c1
+
+   Css Syntax Error.
+
+   postcss-simple-vars: /workspace/meteor/postcss-demo/packages/constellation_console/client/Constellation.css:118:3: Undefined variable $c1
+   background-image: -o-linear-gradient(#000, #000);
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$c1', endColorstr='$c2',GradientType=0);
+   ^
+   color: rgba(255, 255, 255, 0.6);
+```
+
+So we know that this is the problem with `constellation:console` package.
+
 ### Imports with PostCSS
 
 You can use imports with [postcss-easy-import](https://github.com/postcss/postcss-easy-import) plugin. **Remember that postcss-easy-import plugin should be loaded first (so put it on the first place in the packages.json file under the 'postcss.plugins' key)**.
@@ -144,6 +190,7 @@ MIT
 
 ### Changelog
 
+- v1.1.0 Exclude Meteor package option [#14](https://github.com/juliancwirko/meteor-postcss/issues/14)
 - v1.0.0 Version bump for Meteor 1.3
 - v1.0.0-rc.12 Version bump for Meteor 1.3 rc 12
 - v1.0.0-rc.10 Version bump for Meteor 1.3 rc 10

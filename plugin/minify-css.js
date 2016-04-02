@@ -30,11 +30,13 @@ var loadJSONFile = function (filePath) {
 
 var postcssConfigPlugins = {};
 var postcssConfigParser = {};
+var postcssConfigExcludedPackages = {};
 
 if (fs.existsSync(packageFile)) {
     const jsonContent = loadJSONFile(packageFile);
     postcssConfigPlugins = jsonContent.postcss && jsonContent.postcss.plugins;
     postcssConfigParser = jsonContent.postcss && jsonContent.postcss.parser;
+    postcssConfigExcludedPackages = jsonContent.postcss && jsonContent.postcss.excludedPackages;
 }
 
 var getPostCSSPlugins = function () {
@@ -58,6 +60,26 @@ var getPostCSSParser = function () {
     return parser;
 };
 
+var getExcludedPackages = function () {
+    let excluded = null;
+    if (postcssConfigExcludedPackages && postcssConfigExcludedPackages instanceof Array) {
+        excluded = postcssConfigExcludedPackages;
+    }
+    return excluded;
+};
+
+var isNotInExcludedPackages = function (excludedPackages, pathInBundle) {
+    let processedPackageName;
+    let exclArr = [];
+    if (excludedPackages && excludedPackages instanceof Array) {
+        exclArr = excludedPackages.map(packageName => {
+            processedPackageName = packageName && packageName.replace(':', '_');
+            return pathInBundle && pathInBundle.indexOf('packages/' + processedPackageName) > -1;
+        });
+    }
+    return exclArr.indexOf(true) === -1;
+};
+
 var isNotImport = function (inputFileUrl) {
     return !(/\.import\.css$/.test(inputFileUrl) ||
              /(?:^|\/)imports\//.test(inputFileUrl));
@@ -70,15 +92,15 @@ CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
 
     if (!files.length) return;
 
-    var notImportFiles = [];
+    var filesToMerge = [];
 
     files.forEach(function (file) {
         if (isNotImport(file._source.url)) {
-            notImportFiles.push(file);
+            filesToMerge.push(file);
         }
     });
 
-    var merged = mergeCss(notImportFiles);
+    var merged = mergeCss(filesToMerge);
 
     if (mode === 'development') {
         files[0].addStylesheet({
@@ -106,6 +128,7 @@ CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
 var mergeCss = function (css) {
     // Filenames passed to AST manipulator mapped to their original files
     var originals = {};
+    var excludedPackagesArr = getExcludedPackages();
 
     var cssAsts = css.map(function (file) {
         var filename = file.getPathInBundle();
@@ -115,8 +138,15 @@ var mergeCss = function (css) {
 
         var css;
         var postres;
+        var isFileForPostCSS;
 
-        postCSS(getPostCSSPlugins())
+        if (isNotInExcludedPackages(excludedPackagesArr, file.getPathInBundle())) {
+            isFileForPostCSS = true;
+        } else {
+            isFileForPostCSS = false;
+        }
+
+        postCSS(isFileForPostCSS ? getPostCSSPlugins() : [])
             .process(file.getContentsAsString(), {
                 from: process.cwd() + file._source.url,
                 parser: getPostCSSParser()
