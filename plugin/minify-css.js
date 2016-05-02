@@ -1,6 +1,3 @@
-var appModulePath = Npm.require('app-module-path');
-appModulePath.addPath(process.cwd() + '/node_modules/');
-
 var Future = Npm.require('fibers/future');
 var fs = Plugin.fs;
 var path = Plugin.path;
@@ -14,9 +11,10 @@ Plugin.registerMinifier({
     return minifier;
 });
 
-var PACKAGES_FILE = 'package.json';
+var PACKAGE_FILE = 'package.json';
 
-var packageFile = path.resolve(process.cwd(), PACKAGES_FILE);
+var packageFilePath = path.resolve(process.cwd(), PACKAGE_FILE);
+var appsNodeModulesPath = path.resolve(process.cwd(), 'node_modules');
 
 var loadJSONFile = function (filePath) {
     const content = fs.readFileSync(filePath);
@@ -32,8 +30,8 @@ var postcssConfigPlugins = {};
 var postcssConfigParser = {};
 var postcssConfigExcludedPackages = {};
 
-if (fs.existsSync(packageFile)) {
-    const jsonContent = loadJSONFile(packageFile);
+if (fs.existsSync(packageFilePath)) {
+    const jsonContent = loadJSONFile(packageFilePath);
     postcssConfigPlugins = jsonContent.postcss && jsonContent.postcss.plugins;
     postcssConfigParser = jsonContent.postcss && jsonContent.postcss.parser;
     postcssConfigExcludedPackages = jsonContent.postcss && jsonContent.postcss.excludedPackages;
@@ -43,7 +41,7 @@ var getPostCSSPlugins = function () {
     let plugins = [];
     if (postcssConfigPlugins) {
         Object.keys(postcssConfigPlugins).forEach(function (pluginName) {
-            let postCSSPlugin = Npm.require(pluginName);
+            let postCSSPlugin = Npm.require(appsNodeModulesPath + '/' + pluginName);
             if (postCSSPlugin && postCSSPlugin.name === 'creator' && postCSSPlugin().postcssPlugin) {
                 plugins.push(postCSSPlugin(postcssConfigPlugins ? postcssConfigPlugins[pluginName] : {}));
             }
@@ -55,7 +53,7 @@ var getPostCSSPlugins = function () {
 var getPostCSSParser = function () {
     let parser = null;
     if (postcssConfigParser) {
-        parser = Npm.require(postcssConfigParser);
+        parser = Npm.require(appsNodeModulesPath + '/' + postcssConfigParser + '/');
     }
     return parser;
 };

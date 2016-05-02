@@ -36,7 +36,7 @@ Then you need to prepare PostCSS configuration under the `postcss.plugins`.
 
 See example:
 
-**package.json (example):**
+**package.json (just and example, choose only wanted postcss plugins):**
 ```
 {
   "name": "demo PostCSS app",
@@ -44,7 +44,7 @@ See example:
   "description": "",
   "author": "",
   "devDependencies": {
-    "autoprefixer": "^6.3.5",
+    "autoprefixer": "^6.3.6",
     "mocha": "^2.4.5",
     "postcss-easy-import": "^1.0.1",
     "postcss-nested": "^1.0.0",
@@ -82,7 +82,7 @@ From version 1.0.0 you can configure parser for PostCSS. To do this you can add 
   "description": "",
   "author": "",
   "devDependencies": {
-    "autoprefixer": "^6.3.4",
+    "autoprefixer": "^6.3.6",
     "postcss-safe-parser": "^1.0.7"
   },
   "postcss": {
@@ -111,7 +111,7 @@ If you want to exclude a package you need to use `postcss.excludedPackages` key,
   "description": "",
   "author": "",
   "devDependencies": {
-    "autoprefixer": "^6.3.4",
+    "autoprefixer": "^6.3.6",
     "postcss-safe-parser": "^1.0.7"
   },
   "postcss": {
@@ -190,6 +190,7 @@ MIT
 
 ### Changelog
 
+- v1.1.1 Removed problematic app-module-path [#15](https://github.com/juliancwirko/meteor-postcss/issues/15)
 - v1.1.0 Exclude Meteor package option [#14](https://github.com/juliancwirko/meteor-postcss/issues/14)
 - v1.0.0 Version bump for Meteor 1.3
 - v1.0.0-rc.12 Version bump for Meteor 1.3 rc 12
