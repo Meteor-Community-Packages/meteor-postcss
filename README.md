@@ -190,6 +190,7 @@ MIT
 
 ### Changelog
 
+- v1.1.1 Removed `fs.existsSync` call because of [#18](https://github.com/juliancwirko/meteor-postcss/issues/18)
 - v1.1.0 Exclude Meteor package option [#14](https://github.com/juliancwirko/meteor-postcss/issues/14)
 - v1.0.0 Version bump for Meteor 1.3
 - v1.0.0-rc.12 Version bump for Meteor 1.3 rc 12

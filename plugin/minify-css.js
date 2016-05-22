@@ -19,21 +19,27 @@ var PACKAGES_FILE = 'package.json';
 var packageFile = path.resolve(process.cwd(), PACKAGES_FILE);
 
 var loadJSONFile = function (filePath) {
-    const content = fs.readFileSync(filePath);
+    let content;
     try {
-        return JSON.parse(content);
+        content = fs.readFileSync(filePath);
+        try {
+            return JSON.parse(content);
+        } catch (e) {
+            console.log('Error: failed to parse ', filePath, ' as JSON');
+            return {};
+        }
     } catch (e) {
-        console.log('Error: failed to parse ', filePath, ' as JSON');
-        return {};
+        return false;
     }
 };
 
-var postcssConfigPlugins = {};
-var postcssConfigParser = {};
-var postcssConfigExcludedPackages = {};
+var postcssConfigPlugins;
+var postcssConfigParser;
+var postcssConfigExcludedPackages;
 
-if (fs.existsSync(packageFile)) {
-    const jsonContent = loadJSONFile(packageFile);
+var jsonContent = loadJSONFile(packageFile);
+
+if (typeof jsonContent === 'object') {
     postcssConfigPlugins = jsonContent.postcss && jsonContent.postcss.plugins;
     postcssConfigParser = jsonContent.postcss && jsonContent.postcss.parser;
     postcssConfigExcludedPackages = jsonContent.postcss && jsonContent.postcss.excludedPackages;
