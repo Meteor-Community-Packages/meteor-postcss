@@ -12,7 +12,7 @@ For more info check out [#22](https://github.com/juliancwirko/meteor-postcss/iss
 - - -
 
 
-**Version 1.0.0 is for Meteor 1.3 and above. For older Meteor versions you can use 0.2.5.**
+Version 1.1.1 is for Meteor 1.3.*. For older Meteor versions you can use 0.2.5
 
 This package allows you to use PostCSS plugins with **.css files**. You can add your custom plugins by adding Npm packages using `package.json`. You can also use your favourite preprocessor side by side with this package. It allows you to enable many PostCSS plugins, for example **Autoprefixer** for all preprocessors you use. (Of course you can use it whithout any preprocessor too).
 
