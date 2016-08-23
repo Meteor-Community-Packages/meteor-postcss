@@ -4,7 +4,7 @@ Meteor CSS Minifier with [PostCSS](https://github.com/postcss/postcss) processin
 
 - - -
 
-This package works with Meteor 1.4.1, but because Meteor's build system nature it might be hard to use it with many different PostCSS plugins. If you can and want to help, it would be very appreciated. Thanks!
+This package works with Meteor 1.4.1, but because of Meteor's build system nature it might be hard to use it with many different PostCSS plugins. If you can and want to help, it would be very appreciated. Thanks!
 Check out all issues before you use it. If you need it only for Autoprefixer it should work well. I can't guarantee that all PostCSS's plugins will work.
 
 - - -
