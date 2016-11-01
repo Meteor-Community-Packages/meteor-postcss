@@ -4,7 +4,7 @@ Meteor CSS Minifier with [PostCSS](https://github.com/postcss/postcss) processin
 
 - - -
 
-This package works with Meteor 1.4.1, but because of Meteor's build system nature it might be hard to use it with many different PostCSS plugins. If you can and want to help, it would be very appreciated. Thanks!
+It seems that this package works quite well with Meteor 1.4.2, but because of Meteor's build system nature it might be hard to use it with many different PostCSS plugins. If you can and want to help, it would be very appreciated. Thanks!
 Check out all issues before you use it. If you need it only for Autoprefixer it should work well. I can't guarantee that all PostCSS's plugins will work.
 
 - - -
@@ -52,12 +52,12 @@ See example:
   "description": "",
   "author": "",
   "devDependencies": {
-    "autoprefixer": "^6.3.5",
-    "mocha": "^2.4.5",
+    "autoprefixer": "^6.5.1",
+    "mocha": "^3.1.2",
     "postcss-easy-import": "^1.0.1",
     "postcss-nested": "^1.0.0",
-    "postcss-simple-vars": "^1.2.0",
-    "rucksack-css": "^0.8.5"
+    "postcss-simple-vars": "^3.0.0",
+    "rucksack-css": "^0.8.6"
   },
   "postcss": {
     "plugins": {
@@ -92,8 +92,8 @@ From version 1.0.0 you can configure parser for PostCSS. To do this you can add 
   "description": "",
   "author": "",
   "devDependencies": {
-    "autoprefixer": "^6.3.4",
-    "postcss-safe-parser": "^1.0.7"
+    "autoprefixer": "^6.5.1",
+    "postcss-safe-parser": "^2.0.0"
   },
   "postcss": {
     "plugins": {
@@ -121,8 +121,8 @@ If you want to exclude a package you need to use `postcss.excludedPackages` key,
   "description": "",
   "author": "",
   "devDependencies": {
-    "autoprefixer": "^6.3.4",
-    "postcss-safe-parser": "^1.0.7"
+    "autoprefixer": "^6.5.1",
+    "postcss-safe-parser": "^2.0.0"
   },
   "postcss": {
     "plugins": {
@@ -200,6 +200,7 @@ MIT
 
 ### Changelog
 
+- v1.2.0 Updates (works quite well with Meteor 1.4.2)
 - v1.1.1 Removed `fs.existsSync` call because of [#18](https://github.com/juliancwirko/meteor-postcss/issues/18)
 - v1.1.0 Exclude Meteor package option [#14](https://github.com/juliancwirko/meteor-postcss/issues/14)
 - v1.0.0 Version bump for Meteor 1.3
