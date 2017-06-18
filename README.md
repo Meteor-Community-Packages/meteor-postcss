@@ -1,3 +1,7 @@
+
+#### Important! Package is no longer maintained. I am not sure if it will work with newest Meteor versions. If you think you can keep it in good shape, let me know. I'll pass it to you. Thanks.
+
+
 ## Use PostCSS with Meteor - Package
 
 Meteor CSS Minifier with [PostCSS](https://github.com/postcss/postcss) processing.
