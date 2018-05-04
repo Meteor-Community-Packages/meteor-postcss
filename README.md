@@ -171,6 +171,41 @@ You can use it side by side with your favourite preprocessor. There is an exampl
 
 You should be able to use PostCSS plugins syntax in the .styl or .scss files too. (Tested only with Stylus).
 
+### Alternative configuration locations
+
+This package uses [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config) to load
+configuration for PostCSS. This allows you to put PostCSS configuration into alternative locations and not
+just `package.json`. An interesting option is to put configuration into `.postcssrc.js` file in the root
+directory of your app, which allows you to dynamically decide on the configuration. Example:
+
+```js
+module.exports = (ctx) => {
+  // This flag is set when loading configuration by this package.
+  if (ctx.meteor) {
+    const config = {
+      plugins: {
+        'postcss-easy-import': {},
+      },
+    };
+
+    if (ctx.env === 'production') {
+      // "autoprefixer" is reported to be slow,
+      // so we use it only in production.
+      config.plugins.autoprefixer = {
+        browsers: [
+          'last 2 versions',
+        ],
+      };
+    }
+
+    return config;
+  }
+  else {
+    return {};
+  }
+};
+```
+
 ### Demo test repo
 
 Check out the demo repo. This is the best way of learning.
@@ -205,6 +240,9 @@ MIT
 
 ### Changelog
 
+- v2.0.1 Bumping PostCSS to 6.0.22
+- v2.0.0 Started using postcss-load-config for loading configuration
+- v1.3.0 Bumping PostCSS to 6.0.17
 - v1.2.0 Updates (works quite well with Meteor 1.4.2)
 - v1.1.1 Removed `fs.existsSync` call because of [#18](https://github.com/juliancwirko/meteor-postcss/issues/18)
 - v1.1.0 Exclude Meteor package option [#14](https://github.com/juliancwirko/meteor-postcss/issues/14)

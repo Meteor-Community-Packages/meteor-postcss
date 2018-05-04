@@ -13,7 +13,7 @@ Package.registerBuildPlugin({
   ],
   npmDependencies: {
     'source-map': '0.5.6',
-    'postcss': '6.0.17',
+    'postcss': '6.0.22',
     'postcss-load-config': '1.2.0'
   },
   sources: [
