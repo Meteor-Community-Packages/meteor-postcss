@@ -240,8 +240,9 @@ MIT
 
 ### Changelog
 
+- v2.0.1 Bumping PostCSS to 6.0.22
 - v2.0.0 Started using postcss-load-config for loading configuration
-- v1.3.0 Bumping PostCSS to 6.0.17.
+- v1.3.0 Bumping PostCSS to 6.0.17
 - v1.2.0 Updates (works quite well with Meteor 1.4.2)
 - v1.1.1 Removed `fs.existsSync` call because of [#18](https://github.com/juliancwirko/meteor-postcss/issues/18)
 - v1.1.0 Exclude Meteor package option [#14](https://github.com/juliancwirko/meteor-postcss/issues/14)
