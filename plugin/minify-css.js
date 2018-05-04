@@ -1,6 +1,3 @@
-var appModulePath = Npm.require('app-module-path');
-appModulePath.addPath(process.cwd() + '/node_modules/');
-
 var Future = Npm.require('fibers/future');
 var fs = Plugin.fs;
 var path = Plugin.path;
