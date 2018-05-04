@@ -14,7 +14,8 @@ Package.registerBuildPlugin({
   npmDependencies: {
     'source-map': '0.5.6',
     'postcss': '6.0.17',
-    'app-module-path': '2.2.0'
+    'app-module-path': '2.2.0',
+    'postcss-load-config': '1.2.0'
   },
   sources: [
     'plugin/minify-css.js'
