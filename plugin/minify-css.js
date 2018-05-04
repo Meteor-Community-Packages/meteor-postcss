@@ -1,11 +1,9 @@
-var appModulePath = Npm.require('app-module-path');
-appModulePath.addPath(process.cwd() + '/node_modules/');
-
 var Future = Npm.require('fibers/future');
 var fs = Plugin.fs;
 var path = Plugin.path;
 var postCSS = Npm.require('postcss');
 var sourcemap = Npm.require('source-map');
+var load = Npm.require('postcss-load-config');
 
 Plugin.registerMinifier({
     extensions: ['css']
@@ -14,64 +12,31 @@ Plugin.registerMinifier({
     return minifier;
 });
 
-var PACKAGES_FILE = 'package.json';
+var loaded = false;
+var postcssConfigPlugins = [];
+var postcssConfigParser = null;
+var postcssConfigExcludedPackages = [];
 
-var packageFile = path.resolve(process.cwd(), PACKAGES_FILE);
+var loadPostcssConfig = function () {
+    if (!loaded) {
+        loaded = true;
 
-var loadJSONFile = function (filePath) {
-    let content;
-    try {
-        content = fs.readFileSync(filePath);
+        var config;
         try {
-            return JSON.parse(content);
-        } catch (e) {
-            console.log('Error: failed to parse ', filePath, ' as JSON');
-            return {};
+            config = Promise.await(load({meteor: true}));
+            postcssConfigPlugins = config.plugins || [];
+            postcssConfigParser = config.options.parser || null;
+            postcssConfigExcludedPackages = config.options.excludedPackages || [];
+            // There is also "config.file" which is a path to the file we use to force
+            // Meteor reload on any change, but it seems this is not (yet) possible.
         }
-    } catch (e) {
-        return false;
-    }
-};
-
-var postcssConfigPlugins;
-var postcssConfigParser;
-var postcssConfigExcludedPackages;
-
-var jsonContent = loadJSONFile(packageFile);
-
-if (typeof jsonContent === 'object') {
-    postcssConfigPlugins = jsonContent.postcss && jsonContent.postcss.plugins;
-    postcssConfigParser = jsonContent.postcss && jsonContent.postcss.parser;
-    postcssConfigExcludedPackages = jsonContent.postcss && jsonContent.postcss.excludedPackages;
-}
-
-var getPostCSSPlugins = function () {
-    let plugins = [];
-    if (postcssConfigPlugins) {
-        Object.keys(postcssConfigPlugins).forEach(function (pluginName) {
-            let postCSSPlugin = Npm.require(pluginName);
-            if (postCSSPlugin && postCSSPlugin.name === 'creator' && postCSSPlugin().postcssPlugin) {
-                plugins.push(postCSSPlugin(postcssConfigPlugins ? postcssConfigPlugins[pluginName] : {}));
+        catch (error) {
+            // Do not emit an error if the error is that no config can be found.
+            if (error.message.indexOf('No PostCSS Config found') < 0) {
+                throw error;
             }
-        });
+        }
     }
-    return plugins;
-};
-
-var getPostCSSParser = function () {
-    let parser = null;
-    if (postcssConfigParser) {
-        parser = Npm.require(postcssConfigParser);
-    }
-    return parser;
-};
-
-var getExcludedPackages = function () {
-    let excluded = null;
-    if (postcssConfigExcludedPackages && postcssConfigExcludedPackages instanceof Array) {
-        excluded = postcssConfigExcludedPackages;
-    }
-    return excluded;
 };
 
 var isNotInExcludedPackages = function (excludedPackages, pathInBundle) {
@@ -94,6 +59,8 @@ var isNotImport = function (inputFileUrl) {
 function CssToolsMinifier() {};
 
 CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
+    loadPostcssConfig();
+
     var mode = options.minifyMode;
 
     if (!files.length) return;
@@ -134,7 +101,6 @@ CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
 var mergeCss = function (css) {
     // Filenames passed to AST manipulator mapped to their original files
     var originals = {};
-    var excludedPackagesArr = getExcludedPackages();
 
     var cssAsts = css.map(function (file) {
         var filename = file.getPathInBundle();
@@ -146,16 +112,16 @@ var mergeCss = function (css) {
         var postres;
         var isFileForPostCSS;
 
-        if (isNotInExcludedPackages(excludedPackagesArr, file.getPathInBundle())) {
+        if (isNotInExcludedPackages(postcssConfigExcludedPackages, file.getPathInBundle())) {
             isFileForPostCSS = true;
         } else {
             isFileForPostCSS = false;
         }
 
-        postCSS(isFileForPostCSS ? getPostCSSPlugins() : [])
+        postCSS(isFileForPostCSS ? postcssConfigPlugins : [])
             .process(file.getContentsAsString(), {
                 from: process.cwd() + file._source.url,
-                parser: getPostCSSParser()
+                parser: postcssConfigParser
             })
             .then(function (result) {
                 result.warnings().forEach(function (warn) {
