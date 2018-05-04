@@ -1,6 +1,7 @@
 
-#### Important! Package is no longer maintained. I am not sure if it will work with newest Meteor versions. If you think you can keep it in good shape, let me know. I'll pass it to you. Thanks.
+#### Important! Package is no longer actively maintained. I am not sure if it will work with newest Meteor versions. If you think you can keep it in good shape, let me know. I'll pass it to you. Thanks.
 
+From version 2.0.0 it uses [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config). Thanks to [@mitar](https://github.com/mitar). For more info check: [#32](https://github.com/juliancwirko/meteor-postcss/pull/32).
 
 ## Use PostCSS with Meteor - Package
 
