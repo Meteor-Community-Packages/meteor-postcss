@@ -9,12 +9,11 @@ Package.registerBuildPlugin({
   name: 'minifier-postcss',
   use: [
     'ecmascript@0.10.4',
-    'minifier-css@1.3.1'
+    'minifier-css@1.3.1',
+    'tmeasday:check-npm-versions@0.3.2'
   ],
   npmDependencies: {
-    'source-map': '0.5.6',
-    'postcss': '6.0.22',
-    'postcss-load-config': '1.2.0'
+    'source-map': '0.5.6'
   },
   sources: [
     'plugin/minify-css.js'
