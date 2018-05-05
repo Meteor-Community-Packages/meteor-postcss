@@ -248,6 +248,7 @@ MIT
 
 ### Changelog
 
+- v2.0.2 Moved to use peer NPM dependencies
 - v2.0.1 Bumping PostCSS to 6.0.22
 - v2.0.0 Started using postcss-load-config for loading configuration
 - v1.3.0 Bumping PostCSS to 6.0.17
