@@ -1,9 +1,19 @@
-var Future = Npm.require('fibers/future');
+import {checkNpmVersions} from 'meteor/tmeasday:check-npm-versions';
+import Future from 'fibers/future';
+
+var sourcemap = Npm.require('source-map');
+
+checkNpmVersions({
+  'postcss': '^6.0.22',
+  'postcss-load-config': '^1.2.0'
+}, 'juliancwirko:postcss');
+
+var postCSS = require('postcss');
+var load = require('postcss-load-config');
+
+// Not used, but available.
 var fs = Plugin.fs;
 var path = Plugin.path;
-var postCSS = Npm.require('postcss');
-var sourcemap = Npm.require('source-map');
-var load = Npm.require('postcss-load-config');
 
 Plugin.registerMinifier({
     extensions: ['css']

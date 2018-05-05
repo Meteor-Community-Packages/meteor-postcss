@@ -39,7 +39,13 @@ $ meteor remove standard-minifier-css
 $ meteor add juliancwirko:postcss
 ```
 
-#### 3. Add PostCSS plugins:
+#### 3. Add peer NPM dependencies
+
+```
+$ meteor npm install --save-dev postcss@6.0.22 postcss-load-config@1.2.0
+```
+
+#### 4. Add PostCSS plugins:
 
 From Meteor 1.3 you can use standard NPM `package.json`. You can add PostCSS plugins in `devDependencies`. You can also install it like `npm install autoprefixer --save-dev`.
 
@@ -59,7 +65,9 @@ See example:
   "devDependencies": {
     "autoprefixer": "^6.5.1",
     "mocha": "^3.1.2",
+    "postcss": "^6.0.22",
     "postcss-easy-import": "^1.0.1",
+    "postcss-load-config": "^1.2.0",
     "postcss-nested": "^1.0.0",
     "postcss-simple-vars": "^3.0.0",
     "rucksack-css": "^0.8.6"
@@ -84,7 +92,7 @@ You can add more plugins here.
 
 If you want to change something in postcss config later, you should restart your app and also change any .css file to rerun build plugin.
 
-#### 4. Create your standard `.css` files with additional features according to PostCSS plugins you use.
+#### 5. Create your standard `.css` files with additional features according to PostCSS plugins you use.
 
 ### PostCSS parsers
 
@@ -240,6 +248,7 @@ MIT
 
 ### Changelog
 
+- v2.0.2 Moved to use peer NPM dependencies
 - v2.0.1 Bumping PostCSS to 6.0.22
 - v2.0.0 Started using postcss-load-config for loading configuration
 - v1.3.0 Bumping PostCSS to 6.0.17
