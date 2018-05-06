@@ -13,7 +13,8 @@ Package.registerBuildPlugin({
     'tmeasday:check-npm-versions@0.3.2'
   ],
   npmDependencies: {
-    'source-map': '0.5.6'
+    'source-map': '0.5.6',
+    'app-module-path': '2.2.0'
   },
   sources: [
     'plugin/minify-css.js'
