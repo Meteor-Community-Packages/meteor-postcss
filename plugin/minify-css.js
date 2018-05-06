@@ -1,3 +1,8 @@
+// Makes sure we can load peer dependencies from app's directory.
+// See: https://github.com/juliancwirko/meteor-postcss/issues/15
+//      https://github.com/meteor/meteor/issues/9865
+Npm.require('app-module-path/cwd');
+
 import {checkNpmVersions} from 'meteor/tmeasday:check-npm-versions';
 import Future from 'fibers/future';
 
