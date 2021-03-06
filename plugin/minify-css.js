@@ -13,9 +13,6 @@ checkNpmVersions({
     'postcss-load-config': '3.0.x'
 }, 'juliancwirko:postcss');
 
-var postCSS = require('postcss');
-var load = require('postcss-load-config');
-
 // Not used, but available.
 var fs = Plugin.fs;
 var path = Plugin.path;
@@ -38,6 +35,7 @@ var loadPostcssConfig = function () {
 
         var config;
         try {
+            const load = require('postcss-load-config');
             config = Promise.await(load({meteor: true}));
             postcssConfigPlugins = config.plugins || [];
             postcssConfigParser = config.options.parser || null;
@@ -116,6 +114,7 @@ CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
 var mergeCss = function (css) {
     // Filenames passed to AST manipulator mapped to their original files
     var originals = {};
+    var postCSS = require('postcss');
 
     var cssAsts = css.map(function (file) {
         var filename = file.getPathInBundle();
