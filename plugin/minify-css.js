@@ -9,8 +9,8 @@ import Future from 'fibers/future';
 var sourcemap = Npm.require('source-map');
 
 checkNpmVersions({
-  'postcss': '^6.0.22',
-  'postcss-load-config': '^1.2.0'
+    'postcss': '8.2.x',
+    'postcss-load-config': '3.0.x'
 }, 'juliancwirko:postcss');
 
 var postCSS = require('postcss');
@@ -68,7 +68,7 @@ var isNotInExcludedPackages = function (excludedPackages, pathInBundle) {
 
 var isNotImport = function (inputFileUrl) {
     return !(/\.import\.css$/.test(inputFileUrl) ||
-             /(?:^|\/)imports\//.test(inputFileUrl));
+            /(?:^|\/)imports\//.test(inputFileUrl));
 };
 
 function CssToolsMinifier() {};
