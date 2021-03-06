@@ -7,8 +7,8 @@ ecmascript-runtime-client@0.11.0
 ecmascript-runtime-server@0.10.0
 fetch@0.1.1
 inter-process-messaging@0.1.1
-juliancwirko:postcss@2.0.4
-local-test:juliancwirko:postcss@2.0.4
+juliancwirko:postcss@2.0.5
+local-test:juliancwirko:postcss@2.0.5
 meteor@1.9.3
 minifier-css@1.5.3
 modern-browsers@0.1.5
