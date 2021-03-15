@@ -26,7 +26,7 @@ Read more below...
 
 3. Add peer NPM dependencies
 
-   ```
+   ```sh
    meteor npm install --save-dev postcss@6.0.22 postcss-load-config@1.2.0
    ```
 
@@ -41,7 +41,8 @@ Read more below...
    See example:
 
    **package.json (example):**
-   ```
+
+   ```json
    {
      "name": "demo PostCSS app",
      "version": "1.0.0",
@@ -83,7 +84,7 @@ Read more below...
 
 From version 1.0.0 you can configure parser for PostCSS. To do this you can add `parser` key in the `package.json` file under the `postcss` key. Let's see an example:
 
-```
+```json
 {
   "name": "demo PostCSS app",
   "version": "1.0.0",
@@ -112,7 +113,7 @@ If you have installed a package which is problematic and PostCSS plugins can't p
 
 If you want to exclude a package you need to use `postcss.excludedPackages` key, see the example below:
 
-```
+```json
 {
   "name": "demo PostCSS app",
   "version": "1.0.0",
@@ -134,7 +135,7 @@ If you want to exclude a package you need to use `postcss.excludedPackages` key,
 
 **Remember that you should provide a package name which contains a problematic CSS file and not global wrapper package** In this example you want to install `babrahams:constellation` but in fact the problematic package is `constellation:console` which is installed with `babrahams:constellation`. You'll find which package makes troubles by looking into the consolle errors. For example here we have something like:
 
-```
+```sh
 While minifying app stylesheet:
    packages/constellation_console/client/Constellation.css:118:3: postcss-simple-vars:
    /workspace/meteor/postcss-demo/packages/constellation_console/client/Constellation.css:118:3: Undefined variable $c1
