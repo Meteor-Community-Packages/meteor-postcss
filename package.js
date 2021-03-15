@@ -10,7 +10,7 @@ Package.registerBuildPlugin({
   use: [
     'ecmascript@0.10.4',
     'minifier-css@1.3.1',
-    'tmeasday:check-npm-versions@0.3.2'
+    'tmeasday:check-npm-versions@1.0.1'
   ],
   npmDependencies: {
     'source-map': '0.5.6',
