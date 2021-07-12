@@ -1,6 +1,6 @@
 Package.describe({
   summary: 'Minifier for Meteor with PostCSS processing - use Autoprefixer and others with ease',
-  version: '2.0.6',
+  version: '2.0.7',
   name: 'juliancwirko:postcss',
   git: 'https://github.com/juliancwirko/meteor-postcss.git'
 });
@@ -8,9 +8,9 @@ Package.describe({
 Package.registerBuildPlugin({
   name: 'minifier-postcss',
   use: [
-    'ecmascript@0.10.4',
-    'minifier-css@1.3.1',
-    'tmeasday:check-npm-versions@1.0.1'
+    'ecmascript@0.15.2',
+    'minifier-css@1.5.4',
+    'tmeasday:check-npm-versions@1.0.2'
   ],
   npmDependencies: {
     'source-map': '0.5.6',
