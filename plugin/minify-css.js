@@ -9,8 +9,8 @@ import Future from 'fibers/future';
 var sourcemap = Npm.require('source-map');
 
 checkNpmVersions({
-    'postcss': '8.2.x',
-    'postcss-load-config': '3.0.x'
+    'postcss': '8.3.x',
+    'postcss-load-config': '3.1.x'
 }, 'juliancwirko:postcss');
 
 // Not used, but available.
