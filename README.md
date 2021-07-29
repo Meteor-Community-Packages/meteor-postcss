@@ -218,7 +218,7 @@ MIT
 
 ## Changelog
 
-- v2.0.8 Update postcss to 8.3.x and postcss-load-config to 3.1.x
+- v2.0.7 Update postcss to 8.3.x and postcss-load-config to 3.1.x, other dependencies updated as well.
 - v2.0.6 Update tmeasday:check-npm-versions dep to 1.0.1
 - v2.0.5 Update/fix dependency checks
 - v2.0.3 Restoring the use of app-module-path
