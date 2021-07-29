@@ -27,7 +27,7 @@ Read more below...
 3. Add peer NPM dependencies
 
    ```sh
-   meteor npm install --save-dev postcss@6.0.22 postcss-load-config@1.2.0
+   meteor npm install --save-dev postcss@8.3.5 postcss-load-config@3.1.0
    ```
 
 4. Add PostCSS plugins:
@@ -218,6 +218,7 @@ MIT
 
 ## Changelog
 
+- v2.0.8 Update postcss to 8.3.x and postcss-load-config to 3.1.x
 - v2.0.6 Update tmeasday:check-npm-versions dep to 1.0.1
 - v2.0.5 Update/fix dependency checks
 - v2.0.3 Restoring the use of app-module-path
