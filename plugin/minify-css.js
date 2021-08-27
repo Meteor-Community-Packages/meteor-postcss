@@ -133,7 +133,7 @@ var mergeCss = function (css) {
 
         postCSS(isFileForPostCSS ? postcssConfigPlugins : [])
             .process(file.getContentsAsString(), {
-                from: process.cwd() + file._source.url.replace('/__cordova', ''),
+                from: process.cwd() + file._source.url?.replace('/__cordova', ''),
                 parser: postcssConfigParser
             })
             .then(function (result) {
