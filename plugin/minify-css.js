@@ -8,7 +8,7 @@ import Future from 'fibers/future';
 import sourcemap from 'source-map';
 
 checkNpmVersions({
-    'postcss': '8.3.x',
+    'postcss': '8.4.x',
     'postcss-load-config': '3.1.x'
 }, 'juliancwirko:postcss');
 
