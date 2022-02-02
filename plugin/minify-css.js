@@ -6,13 +6,18 @@ Npm.require('app-module-path/cwd');
 import { checkNpmVersions } from 'meteor/tmeasday:check-npm-versions';
 import Future from 'fibers/future';
 import sourcemap from 'source-map';
+import { createHash } from "crypto";
+import micromatch from 'micromatch';
+import LRU from 'lru-cache';
+import { performance } from 'perf_hooks';
 
 checkNpmVersions({
     'postcss': '8.3.x',
     'postcss-load-config': '3.1.x'
 }, 'juliancwirko:postcss');
 
-// Not used, but available.
+const DEBUG_CACHE = process.env.DEBUG_METEOR_POSTCSS_CACHE === 'true';
+
 var fs = Plugin.fs;
 var path = Plugin.path;
 
@@ -68,7 +73,81 @@ var isNotImport = function (inputFileUrl) {
             /(?:^|\/)imports\//.test(inputFileUrl));
 };
 
-function CssToolsMinifier() {};
+var watchAndHashDeps = Profile('watchAndHashDeps', function (deps, file) {
+    const hash = createHash('sha1');
+    const globsByDir = Object.create(null);
+    let fileCount = 0;
+    let folderCount = 0;
+    let start = performance.now();
+
+    deps.forEach(dep => {
+        if (dep.type === 'dependency') {
+            fileCount += 1;
+            const fileHash = file.readAndWatchFileWithHash(dep.file, { cache: true }).hash;
+            hash.update(fileHash).update('\0');
+        } else if (dep.type === 'dir-dependency') {
+            if (dep.dir in globsByDir) {
+                globsByDir[dep.dir].push(dep.glob || '**');
+            } else {
+                globsByDir[dep.dir] = [dep.glob || '**'];
+            }
+        }
+    });
+
+
+    Object.entries(globsByDir).forEach(([ parentDir, globs ]) => {
+        const matchers = globs.map(glob => micromatch.matcher(glob));
+
+        function walk(dir) {
+            folderCount += 1;
+            hash.update(dir).update('\0');
+
+            const entries = fs.readdirWithTypesSync(dir);
+            for (const entry of entries) {
+                const absPath = path.join(dir, entry.name);
+
+                if (entry.isFile() && matchers.some(isMatch => isMatch(absPath))) {
+                    fileCount += 1;
+                    hash.update(file.readAndWatchFileWithHash(absPath, { cache: true }).hash).update('\0');
+                } else if (
+                    entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.meteor'
+                ) {
+                    walk(absPath);
+                }
+            }
+        }
+
+        walk(parentDir);
+    });
+
+    let digest = hash.digest('hex');
+
+    if (DEBUG_CACHE) {
+        console.log('--- PostCSS Cache Info ---');
+        console.log('Glob deps', JSON.stringify(globsByDir, null, 2));
+        console.log('File dep count', fileCount);
+        console.log('Walked folders', folderCount);
+        console.log('Created dep cache key in', performance.now() - start, 'ms');
+        console.log('--------------------------');
+    }
+
+    return digest;
+});
+
+const createCacheKey = Profile("createCacheKey", function (files, mode) {
+    const hash = createHash("sha1");
+    hash.update(mode).update("\0");
+    files.forEach(f => {
+        hash.update(f.getSourceHash()).update("\0");
+    });
+    return hash.digest("hex");
+});
+
+function CssToolsMinifier() {
+    this.mergeCache = new LRU({
+        max: 100
+    });
+};
 
 CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
     loadPostcssConfig();
@@ -85,7 +164,22 @@ CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
         }
     });
 
-    var merged = mergeCss(filesToMerge);
+    const cacheKey = createCacheKey(filesToMerge, mode);
+    let merged = this.mergeCache.get(cacheKey);
+
+    if (
+        !merged || merged.depsCacheKey !== watchAndHashDeps(merged.deps, files[0])
+    ) {
+        DEBUG_CACHE && console.log('PostCSS - not cached');
+
+        merged = mergeCss(filesToMerge);
+        this.mergeCache.set(cacheKey, {
+            ...merged,
+            depsCacheKey: watchAndHashDeps(merged.deps, files[0])
+        });
+    } else if (DEBUG_CACHE) {
+        console.log('PostCSS - using cached result');
+    }
 
     if (mode === 'development') {
         files[0].addStylesheet({
@@ -114,6 +208,7 @@ var mergeCss = function (css) {
     // Filenames passed to AST manipulator mapped to their original files
     var originals = {};
     var postCSS = require('postcss');
+    var deps = [];
 
     var cssAsts = css.map(function (file) {
         var filename = file.getPathInBundle();
@@ -161,6 +256,17 @@ var mergeCss = function (css) {
 
             if (postres.name === 'CssSyntaxError') {
                 throw postres;
+            }
+
+            if (postres.messages) {
+                postres.messages.forEach(message => {
+                    if (
+                        message.type === 'dependency' ||
+                        message.type === 'dir-dependency'
+                    ) {
+                        deps.push(message);
+                    }
+                });
             }
 
             css = postres.css;
@@ -218,7 +324,8 @@ var mergeCss = function (css) {
 
     if (!stringifiedCss.code) {
         return {
-            code: ''
+            code: '',
+            deps
         };
     }
 
@@ -251,6 +358,7 @@ var mergeCss = function (css) {
 
     return {
         code: stringifiedCss.code,
-        sourceMap: newMap.toString()
+        sourceMap: newMap.toString(),
+        deps
     };
 };
