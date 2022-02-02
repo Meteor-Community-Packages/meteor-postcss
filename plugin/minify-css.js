@@ -98,26 +98,28 @@ var watchAndHashDeps = Profile('watchAndHashDeps', function (deps, file) {
     Object.entries(globsByDir).forEach(([ parentDir, globs ]) => {
         const matchers = globs.map(glob => micromatch.matcher(glob));
 
-        function walk(dir) {
+        function walk(relDir) {
+            const absDir = path.join(parentDir, relDir);
+            hash.update(absDir).update('\0');
             folderCount += 1;
-            hash.update(dir).update('\0');
 
-            const entries = fs.readdirWithTypesSync(dir);
+            const entries = fs.readdirWithTypesSync(absDir);
             for (const entry of entries) {
-                const absPath = path.join(dir, entry.name);
+                const relPath = path.join(relDir, entry.name);
 
-                if (entry.isFile() && matchers.some(isMatch => isMatch(absPath))) {
+                if (entry.isFile() && matchers.some(isMatch => isMatch(relPath))) {
+                    const absPath = path.join(absDir, entry.name);
                     fileCount += 1;
                     hash.update(file.readAndWatchFileWithHash(absPath, { cache: true }).hash).update('\0');
                 } else if (
                     entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.meteor'
                 ) {
-                    walk(absPath);
+                    walk(relPath);
                 }
             }
         }
 
-        walk(parentDir);
+        walk('./');
     });
 
     let digest = hash.digest('hex');
