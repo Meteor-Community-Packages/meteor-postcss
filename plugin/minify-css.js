@@ -83,7 +83,7 @@ var watchAndHashDeps = Profile('watchAndHashDeps', function (deps, file) {
     deps.forEach(dep => {
         if (dep.type === 'dependency') {
             fileCount += 1;
-            const fileHash = file.readAndWatchFileWithHash(dep.file, { cache: true }).hash;
+            const fileHash = file.readAndWatchFileWithHash(dep.file).hash;
             hash.update(fileHash).update('\0');
         } else if (dep.type === 'dir-dependency') {
             if (dep.dir in globsByDir) {
@@ -110,7 +110,7 @@ var watchAndHashDeps = Profile('watchAndHashDeps', function (deps, file) {
                 if (entry.isFile() && matchers.some(isMatch => isMatch(relPath))) {
                     const absPath = path.join(absDir, entry.name);
                     fileCount += 1;
-                    hash.update(file.readAndWatchFileWithHash(absPath, { cache: true }).hash).update('\0');
+                    hash.update(file.readAndWatchFileWithHash(absPath).hash).update('\0');
                 } else if (
                     entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.meteor'
                 ) {
