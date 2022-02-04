@@ -155,6 +155,24 @@ function CssToolsMinifier() {
     this.mergeCache = new LRU({
         max: 100
     });
+    this.depsHashCache = Object.create(null);
+};
+
+CssToolsMinifier.prototype.watchAndHashDeps = function (deps, file) {
+    const cacheKey = JSON.stringify(deps);
+    
+    if (cacheKey in this.depsHashCache) {
+        return this.depsHashCache[cacheKey]
+    }
+
+    let hash = watchAndHashDeps(deps, file);
+    this.depsHashCache[cacheKey] = hash;
+
+    return hash;
+};
+
+CssToolsMinifier.prototype.beforeMinify = function () {
+    this.depsHashCache = Object.create(null);
 };
 
 CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
@@ -176,14 +194,14 @@ CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
     let merged = this.mergeCache.get(cacheKey);
 
     if (
-        !merged || merged.depsCacheKey !== watchAndHashDeps(merged.deps, files[0])
+        !merged || merged.depsCacheKey !== this.watchAndHashDeps(merged.deps, files[0])
     ) {
         DEBUG_CACHE && console.log('PostCSS - not cached');
 
         merged = mergeCss(filesToMerge);
         this.mergeCache.set(cacheKey, {
             ...merged,
-            depsCacheKey: watchAndHashDeps(merged.deps, files[0])
+            depsCacheKey: this.watchAndHashDeps(merged.deps, files[0])
         });
     } else if (DEBUG_CACHE) {
         console.log('PostCSS - using cached result');
