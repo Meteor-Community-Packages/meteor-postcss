@@ -73,13 +73,7 @@ var isNotImport = function (inputFileUrl) {
             /(?:^|\/)imports\//.test(inputFileUrl));
 };
 
-var watchAndHashDeps = Profile('watchAndHashDeps', function (deps, file) {
-    if (typeof file.readAndWatchFileWithHash !== 'function') {
-        DEBUG_CACHE && console.log('PostCSS: ignoring deps; old Meteor version');
-
-        return;
-    }
-
+var watchAndHashDeps = Profile('watchAndHashDeps', function (deps, hashAndWatchFile) {
     const hash = createHash('sha1');
     const globsByDir = Object.create(null);
     let fileCount = 0;
@@ -89,7 +83,7 @@ var watchAndHashDeps = Profile('watchAndHashDeps', function (deps, file) {
     deps.forEach(dep => {
         if (dep.type === 'dependency') {
             fileCount += 1;
-            const fileHash = file.readAndWatchFileWithHash(dep.file).hash;
+            const fileHash = hashAndWatchFile(dep.file);
             hash.update(fileHash).update('\0');
         } else if (dep.type === 'dir-dependency') {
             if (dep.dir in globsByDir) {
@@ -116,7 +110,7 @@ var watchAndHashDeps = Profile('watchAndHashDeps', function (deps, file) {
                 if (entry.isFile() && matchers.some(isMatch => isMatch(relPath))) {
                     const absPath = path.join(absDir, entry.name);
                     fileCount += 1;
-                    hash.update(file.readAndWatchFileWithHash(absPath).hash).update('\0');
+                    hash.update(hashAndWatchFile(absPath)).update('\0');
                 } else if (
                     entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.meteor'
                 ) {
@@ -159,13 +153,23 @@ function CssToolsMinifier() {
 };
 
 CssToolsMinifier.prototype.watchAndHashDeps = function (deps, file) {
+    if (typeof file.readAndWatchFileWithHash !== 'function') {
+        DEBUG_CACHE && console.log('PostCSS: ignoring deps; old Meteor version');
+
+        return null;
+    }
+
     const cacheKey = JSON.stringify(deps);
     
     if (cacheKey in this.depsHashCache) {
         return this.depsHashCache[cacheKey]
     }
 
-    let hash = watchAndHashDeps(deps, file);
+    let hash = watchAndHashDeps(deps, (filePath) => {
+        // Calling readAndWatchFileWithHash on a path ensures Meteor will
+        // rebuild if that file is modified
+        return file.readAndWatchFileWithHash(filePath).hash;
+    });
     this.depsHashCache[cacheKey] = hash;
 
     return hash;
@@ -193,6 +197,9 @@ CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
     const cacheKey = createCacheKey(filesToMerge, mode);
     let merged = this.mergeCache.get(cacheKey);
 
+    // watchAndHashDeps has to be run at least once during every (re)build
+    // to ensure Meteor watches all of the deps (the list of files to watch is
+    // reset during every build)
     if (
         !merged || merged.depsCacheKey !== this.watchAndHashDeps(merged.deps, files[0])
     ) {
