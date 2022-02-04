@@ -74,6 +74,12 @@ var isNotImport = function (inputFileUrl) {
 };
 
 var watchAndHashDeps = Profile('watchAndHashDeps', function (deps, file) {
+    if (typeof file.readAndWatchFileWithHash !== 'function') {
+        DEBUG_CACHE && console.log('PostCSS: ignoring deps; old Meteor version');
+
+        return;
+    }
+
     const hash = createHash('sha1');
     const globsByDir = Object.create(null);
     let fileCount = 0;
