@@ -14,7 +14,9 @@ Package.registerBuildPlugin({
   ],
   npmDependencies: {
     'source-map': '0.5.6',
-    'app-module-path': '2.2.0'
+    'app-module-path': '2.2.0',
+    'lru-cache': '6.0.0',
+    'micromatch': '4.0.4'
   },
   sources: [
     'plugin/minify-css.js'

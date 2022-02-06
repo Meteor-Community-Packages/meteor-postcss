@@ -165,6 +165,12 @@ You can use it side by side with your favourite preprocessor. There is an exampl
 
 You should be able to use PostCSS plugins syntax in the .styl or .scss files too. (Tested only with Stylus).
 
+## Tailwind CSS
+
+Tailwind CSS is supported when used with Meteor `<unknown>` or newer.
+
+Since HMR applies updates to js files earlier than the css is updated, there can be a delay when using a Tailwind CSS class the first time before the styles are applied.
+
 ## Alternative configuration locations
 
 This package uses [postcss-load-config](https://github.com/michael-ciniawsky/postcss-load-config) to load
