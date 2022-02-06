@@ -27,7 +27,7 @@ Read more below...
 3. Add peer NPM dependencies
 
    ```sh
-   meteor npm install --save-dev postcss@8.3.5 postcss-load-config@3.1.0
+   meteor npm install --save-dev postcss@8.4.6 postcss-load-config@3.1.1
    ```
 
 4. Add PostCSS plugins:
@@ -86,20 +86,20 @@ From version 1.0.0 you can configure parser for PostCSS. To do this you can add 
 
 ```json
 {
-  "name": "demo PostCSS app",
-  "version": "1.0.0",
-  "description": "",
-  "author": "",
-  "devDependencies": {
-    "autoprefixer": "^6.5.1",
-    "postcss-safe-parser": "^2.0.0"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {"browsers": ["last 2 versions"]}
-    },
-    "parser": "postcss-safe-parser"
-  }
+   "name": "demo PostCSS app",
+   "version": "1.0.0",
+   "description": "",
+   "author": "",
+   "devDependencies": {
+      "autoprefixer": "^6.5.1",
+      "postcss-safe-parser": "^2.0.0"
+   },
+   "postcss": {
+      "plugins": {
+         "autoprefixer": {"browsers": ["last 2 versions"]}
+      },
+      "parser": "postcss-safe-parser"
+   }
 }
 ```
 
@@ -115,21 +115,21 @@ If you want to exclude a package you need to use `postcss.excludedPackages` key,
 
 ```json
 {
-  "name": "demo PostCSS app",
-  "version": "1.0.0",
-  "description": "",
-  "author": "",
-  "devDependencies": {
-    "autoprefixer": "^6.5.1",
-    "postcss-safe-parser": "^2.0.0"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {"browsers": ["last 2 versions"]}
-    },
-    "parser": "postcss-safe-parser",
-    "excludedPackages": ["constellation:console"]
-  }
+   "name": "demo PostCSS app",
+   "version": "1.0.0",
+   "description": "",
+   "author": "",
+   "devDependencies": {
+      "autoprefixer": "^6.5.1",
+      "postcss-safe-parser": "^2.0.0"
+   },
+   "postcss": {
+      "plugins": {
+         "autoprefixer": {"browsers": ["last 2 versions"]}
+      },
+      "parser": "postcss-safe-parser",
+      "excludedPackages": ["constellation:console"]
+   }
 }
 ```
 
@@ -155,7 +155,7 @@ So we know that this is the problem with `constellation:console` package.
 
 You can use imports with [postcss-easy-import](https://github.com/postcss/postcss-easy-import) plugin. **Remember that postcss-easy-import plugin should be loaded first (so put it on the first place in the packages.json file under the 'postcss.plugins' key)**.
 
-You need to use `.import.css` extension and standard import like with preprocessors `@import "my-file.import.css";` Files with `.import.css` will be ommited by css minifier from this package. You can also put them in an `imports` folder (from Meteor 1.3). Also read more about `postcss-easy-import` and `postcss-import` which is a part of the first one.
+You need to use `.import.css` extension and standard import like with preprocessors `@import "my-file.import.css";` Files with `.import.css` will be omitted by css minifier from this package. You can also put them in an `imports` folder (from Meteor 1.3). Also read more about `postcss-easy-import` and `postcss-import` which is a part of the first one.
 
 Imports from Meteor packages will not work. But there is a good news too. from Meteor 1.3 you can use standard Npm packages and imports from `node_modules` should work. So you will be able to import css files from instaled Npm packages. You will be able to do something like: `@import 'my-npm-lib/styles.css'`;
 
@@ -167,7 +167,7 @@ You should be able to use PostCSS plugins syntax in the .styl or .scss files too
 
 ## Tailwind CSS
 
-Tailwind CSS is supported when used with Meteor `<unknown>` or newer.
+Tailwind CSS is supported when used with Meteor `2.6.1` or newer.
 
 Since HMR applies updates to js files earlier than the css is updated, there can be a delay when using a Tailwind CSS class the first time before the styles are applied.
 
@@ -224,6 +224,8 @@ MIT
 
 ## Changelog
 
+- v2.1.0 Updated postcss to 8.4.x & added support for TailwindCSS 3
+- v2.0.8 Fix Cordova undefined bug when not on Cordova
 - v2.0.7 Update postcss to 8.3.x and postcss-load-config to 3.1.x, other dependencies updated as well.
 - v2.0.6 Update tmeasday:check-npm-versions dep to 1.0.1
 - v2.0.5 Update/fix dependency checks
