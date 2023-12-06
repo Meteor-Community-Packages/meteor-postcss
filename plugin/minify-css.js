@@ -1,14 +1,15 @@
 // Makes sure we can load peer dependencies from app's directory.
 // See: https://github.com/juliancwirko/meteor-postcss/issues/15
 //      https://github.com/meteor/meteor/issues/10827
+import postCSS from 'postcss'
+
 Npm.require('app-module-path/cwd');
 
 import { checkNpmVersions } from 'meteor/tmeasday:check-npm-versions';
-import Future from 'fibers/future';
 import sourcemap from 'source-map';
 
 checkNpmVersions({
-    'postcss': '8.3.x',
+    'postcss': '8.4.x',
     'postcss-load-config': '3.1.x'
 }, 'juliancwirko:postcss');
 
@@ -28,14 +29,14 @@ var postcssConfigPlugins = [];
 var postcssConfigParser = null;
 var postcssConfigExcludedPackages = [];
 
-var loadPostcssConfig = function () {
+var loadPostcssConfig = async function () {
     if (!loaded) {
         loaded = true;
 
         var config;
         try {
             const load = require('postcss-load-config');
-            config = Promise.await(load({meteor: true}));
+            config = await load({meteor: true});
             postcssConfigPlugins = config.plugins || [];
             postcssConfigParser = config.options.parser || null;
             postcssConfigExcludedPackages = config.options.excludedPackages || [];
@@ -70,8 +71,8 @@ var isNotImport = function (inputFileUrl) {
 
 function CssToolsMinifier() {};
 
-CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
-    loadPostcssConfig();
+CssToolsMinifier.prototype.processFilesForBundle = async function (files, options) {
+    await loadPostcssConfig();
 
     var mode = options.minifyMode;
 
@@ -85,7 +86,7 @@ CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
         }
     });
 
-    var merged = mergeCss(filesToMerge);
+    var merged = await mergeCss(filesToMerge);
 
     if (mode === 'development') {
         files[0].addStylesheet({
@@ -110,18 +111,18 @@ CssToolsMinifier.prototype.processFilesForBundle = function (files, options) {
 // Lints CSS files and merges them into one file, fixing up source maps and
 // pulling any @import directives up to the top since the CSS spec does not
 // allow them to appear in the middle of a file.
-var mergeCss = function (css) {
+var mergeCss = async function (css) {
     // Filenames passed to AST manipulator mapped to their original files
     var originals = {};
-    var postCSS = require('postcss');
+    var cssAsts = []
 
-    var cssAsts = css.map(function (file) {
+    // use for..of to sequencially process
+    // async results, which won't work in .map
+    for (const file of css) {
         var filename = file.getPathInBundle();
         originals[filename] = file;
 
-        var f = new Future;
-
-        var css;
+        var currentCss;
         var postres;
         var isFileForPostCSS;
 
@@ -131,41 +132,21 @@ var mergeCss = function (css) {
             isFileForPostCSS = false;
         }
 
-        postCSS(isFileForPostCSS ? postcssConfigPlugins : [])
-            .process(file.getContentsAsString(), {
-                from: process.cwd() + file._source.url?.replace('/__cordova', ''),
-                parser: postcssConfigParser
-            })
-            .then(function (result) {
-                result.warnings().forEach(function (warn) {
-                    process.stderr.write(warn.toString());
-                });
-                f.return(result);
-            })
-            .catch(function (error) {
-                var errMsg = error.message;
-                if (error.name === 'CssSyntaxError') {
-                    errMsg = error.message + '\n\n' + 'Css Syntax Error.' + '\n\n' + error.message + error.showSourceCode()
-                }
-                error.message = errMsg;
-                f.return(error);
-            });
-
         try {
             var parseOptions = {
                 source: filename,
                 position: true
             };
 
-            postres = f.wait();
+            postres = await processFile({ file, isFileForPostCSS })
 
             if (postres.name === 'CssSyntaxError') {
                 throw postres;
             }
 
-            css = postres.css;
+            currentCss = postres.css;
 
-            var ast = CssTools.parseCss(css, parseOptions);
+            var ast = CssTools.parseCss(currentCss, parseOptions);
             ast.filename = filename;
         } catch (e) {
 
@@ -197,8 +178,8 @@ var mergeCss = function (css) {
             };
         }
 
-        return ast;
-    });
+        cssAsts.push(ast);
+    }
 
     var warnCb = function (filename, msg) {
         // XXX make this a buildmessage.warning call rather than a random log.
@@ -254,3 +235,26 @@ var mergeCss = function (css) {
         sourceMap: newMap.toString()
     };
 };
+
+const processFile = async ({ file, isFileForPostCSS }) => {
+    let result
+
+    try {
+        result = await postCSS(isFileForPostCSS ? postcssConfigPlugins : [])
+          .process(file.getContentsAsString(), {
+              from: process.cwd() + file._source.url?.replace('/__cordova', ''),
+              parser: postcssConfigParser
+          })
+        result.warnings().forEach(function (warn) {
+            process.stderr.write(warn.toString());
+        });
+        return result
+    } catch (error) {
+        var errMsg = error.message;
+        if (error.name === 'CssSyntaxError') {
+            errMsg = error.message + '\n\n' + 'Css Syntax Error.' + '\n\n' + error.message + error.showSourceCode()
+        }
+        error.message = errMsg;
+        return error
+    }
+}
