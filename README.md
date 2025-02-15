@@ -1,5 +1,12 @@
 # PostCSS Plugin For Meteor
 
+## Compatibility
+
+**This package is only compatible with Meteor 2**. 
+Meteor 3 can use `postcss` using the `standard-minifier-css` package
+
+## Presentation
+
 Meteor CSS Minifier with [PostCSS](https://github.com/postcss/postcss) processing.
 
 This package allows you to use PostCSS plugins with **.css files**. You can add your custom plugins by adding Npm packages using `package.json`. You can also use your favourite preprocessor side by side with this package. It allows you to enable many PostCSS plugins, for example **Autoprefixer** for all preprocessors you use. (Of course you can use it whithout any preprocessor too).
